@@ -41,13 +41,7 @@ export default function Header() {
       <div className="flex justify-between items-center p-4 bg-background">
         <h1>
           <Link href="/" className="flex w-28">
-            <Image
-              src="/images/logo.svg"
-              alt="99haus"
-              width={112}
-              height={28}
-              priority
-            />
+            <img className="w-full" src="/images/logo.svg" alt="99haus" />
           </Link>
         </h1>
         <button
