@@ -21,22 +21,9 @@ export default function Header() {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  // 메뉴가 열릴 때 body 스크롤 방지
-  useEffect(() => {
-    if (isMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-
-    return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, [isMenuOpen]);
-
   // ESC 키로 메뉴 닫기 기능
   useEffect(() => {
-    const handleEsc = (e) => {
+    const handleEsc = (e: { key: string }) => {
       if (e.key === "Escape") {
         setIsMenuOpen(false);
       }
@@ -51,7 +38,7 @@ export default function Header() {
 
   return (
     <header className="z-50 py-4 sticky inset-x-0 top-0 bg-background">
-      <div className="container mx-auto flex justify-between items-center p-4 bg-background">
+      <div className="flex justify-between items-center p-4 bg-background">
         <h1>
           <Link href="/" className="flex w-28">
             <Image
@@ -65,7 +52,7 @@ export default function Header() {
         </h1>
         <button
           onClick={toggleMenu}
-          className="sm:hidden text-foreground z-50"
+          className="sm:hidden text-foreground z-50 p-4"
           aria-label="메뉴 열기/닫기"
           aria-expanded={isMenuOpen}
           aria-controls="mobile-menu"
@@ -97,7 +84,7 @@ export default function Header() {
       {/* 모바일 메뉴 */}
       <nav
         id="mobile-menu"
-        className={`sm:hidden fixed inset-0 bg-background transition-all duration-300 ease-in-out ${
+        className={`h-fit sm:hidden fixed inset-0 bg-background transition-all duration-300 ease-in-out ${
           isMenuOpen
             ? "opacity-100 translate-y-0"
             : "opacity-0 -translate-y-full pointer-events-none"
@@ -105,7 +92,7 @@ export default function Header() {
         aria-hidden={!isMenuOpen}
         role="menu"
       >
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-fit">
           <ul className="flex flex-col gap-y-8 p-8 pt-20 text-xl">
             {menuItems.map((item) => (
               <li key={item.href} role="menuitem">
