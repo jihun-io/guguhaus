@@ -121,7 +121,7 @@ function HistoryCard({ data }: Readonly<CardProps>) {
         className="w-full object-cover  aspect-[210/297] my-0"
       />
       <h3 className="my-2 leading-6">{data.title}</h3>
-      <p className="my-2 leading-4">{data.titleEng}</p>
+      <p className="my-2 leading-4 uppercase">{data.titleEng}</p>
       <p className="my-0">{data.category}</p>
       <p className="my-0">
         @{year}
