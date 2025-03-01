@@ -12,7 +12,7 @@ export default function Header() {
 
   // 메뉴 항목을 배열로 정의하여 중복 코드 제거
   const menuItems = [
-    { href: "/works", label: "WORKS" },
+    { href: "/", label: "WORKS" },
     { href: "/participants", label: "PARTICIPANTS" },
     { href: "/contact", label: "CONTACT" },
   ];
