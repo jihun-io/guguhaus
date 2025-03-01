@@ -18,3 +18,29 @@ body {
     text-wrap: balance;
   }
 }
+
+@layer base {
+  .font-outline-base {
+    -webkit-text-stroke: 0.5px var(--background);
+  }
+  .font-outline-1 {
+    -webkit-text-stroke: 1px var(--background);
+  }
+
+  .font-outline-2 {
+    -webkit-text-stroke: 2px var(--background);
+  }
+  .font-outline-4 {
+    -webkit-text-stroke: 4px var(--background);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p {
+    word-break: keep-all;
+  }
+}
