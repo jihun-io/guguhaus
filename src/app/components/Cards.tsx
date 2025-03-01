@@ -30,7 +30,7 @@ interface ParticipantsProps {
 
 function Section({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <section className="prose prose-p:text-foreground prose-headings:text-foreground prose-a:text-foreground w-full grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 gap-8 mb-16">
+    <section className="prose prose-p:text-foreground prose-headings:text-foreground prose-a:no-underline prose-a:text-foreground w-full grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 gap-8 mb-16">
       {children}
     </section>
   );
@@ -154,7 +154,7 @@ function ParticipantsCard({ data }: Readonly<ParticipantsProps>) {
       />
       <p className="my-0">{data.artist}</p>
       <p className="my-0">{data.job}</p>
-      <a href={data.href} className="my-0">
+      <a href={data.href} className="my-0 not-prose underline">
         {data.social}
       </a>
     </article>
