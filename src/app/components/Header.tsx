@@ -52,7 +52,7 @@ export default function Header() {
         </h1>
         <button
           onClick={toggleMenu}
-          className="sm:hidden text-foreground z-50 p-4"
+          className="sm:hidden text-foreground z-50 p-2"
           aria-label="메뉴 열기/닫기"
           aria-expanded={isMenuOpen}
           aria-controls="mobile-menu"
