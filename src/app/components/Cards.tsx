@@ -50,7 +50,7 @@ export function WIPCard({ data }: Readonly<CardProps>) {
         width={480}
         height={480}
       />
-      <h3 className="my-2">{data.title}</h3>
+      <h3 className="mt-2 mb-0">{data.title}</h3>
       <p className="my-0">{data.genre}</p>
       <p className="my-0">@{new Date(data.createdAt).getFullYear()}</p>
     </Link>
