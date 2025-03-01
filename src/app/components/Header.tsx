@@ -67,7 +67,6 @@ export default function Header() {
               : "opacity-0 -translate-y-full pointer-events-none sm:opacity-100 sm:translate-y-0 sm:pointer-events-auto"
           }
         `}
-        aria-hidden={!isMenuOpen && window.innerWidth < 640}
         role="menu"
       >
         <ul
