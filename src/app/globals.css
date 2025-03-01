@@ -43,4 +43,8 @@ body {
   p {
     word-break: keep-all;
   }
+
+  a {
+    color: var(--foreground);
+  }
 }
