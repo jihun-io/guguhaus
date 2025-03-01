@@ -1,6 +1,11 @@
 import { Participants } from "../components/Cards";
 import { MainTitle } from "../components/Title";
 
+export const metadata = {
+  title: "PARTICIPANTS - 99haus",
+  description: "프로젝트 참여자들을 소개합니다.",
+};
+
 const artistData = [
   {
     artist: "뚱이 PATRICK",

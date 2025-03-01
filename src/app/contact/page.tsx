@@ -1,5 +1,10 @@
 import { MainTitle } from "../components/Title";
 
+export const metadata = {
+  title: "CONTACT - 99haus",
+  description: "연락 방법",
+};
+
 export default function Contact() {
   return (
     <>
