@@ -6,7 +6,7 @@ export default function Header() {
     <header className="flex justify-between items-center p-8">
       <h1>
         <Link href="/">
-          <Image src="/images/logo.svg" alt="99haus" width={200} height={200} />
+          <img src="/images/logo.svg" alt="99haus" className="w-40" />
         </Link>
       </h1>
       <nav>
