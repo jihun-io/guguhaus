@@ -42,6 +42,7 @@ export const authOptions: NextAuthOptions = {
         return {
           id: userDoc.id,
           userId: userData.userId,
+          username: userData.username,
         };
       },
     }),
@@ -51,6 +52,7 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id;
         token.userId = (user as CustomUser).userId;
+        token.username = (user as any).username; // username 속성 추가
       }
       return token;
     },
@@ -58,6 +60,7 @@ export const authOptions: NextAuthOptions = {
       if (session.user) {
         session.user.id = token.id as string;
         session.user.userId = token.userId as string;
+        session.user.username = token.username as string; // username 속성 추가
       }
       return session;
     },
