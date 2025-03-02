@@ -154,7 +154,7 @@ function ParticipantsCard({ data }: Readonly<ParticipantsProps>) {
       />
       <h3 className="my-0">{data.artist}</h3>
       <p className="my-0">{data.job}</p>
-      <a href={data.href} className="my-0 not-prose underline">
+      <a href={data.href} target="_blank" className="my-0 not-prose underline">
         {data.social}
       </a>
     </article>
