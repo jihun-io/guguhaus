@@ -28,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body
-        className={`px-8 min-h-screen grid grid-rows-[auto,1fr,auto] prose-p:text-foreground prose-headings:text-foreground`}
+        className={`px-8 min-h-screen grid grid-rows-[auto,1fr,auto] prose-p:text-foreground prose-headings:text-foreground overflow-y-scroll`}
       >
         <Header />
         <main className="flex flex-col py-16 min-h-full">{children}</main>
