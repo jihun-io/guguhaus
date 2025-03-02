@@ -152,7 +152,7 @@ function ParticipantsCard({ data }: Readonly<ParticipantsProps>) {
         height={480}
         className="w-full aspect-square object-cover "
       />
-      <p className="my-0">{data.artist}</p>
+      <h3 className="my-0">{data.artist}</h3>
       <p className="my-0">{data.job}</p>
       <a href={data.href} className="my-0 not-prose underline">
         {data.social}
