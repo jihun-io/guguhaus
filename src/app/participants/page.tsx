@@ -1,31 +1,42 @@
 import { Participants } from "@/components/Cards";
 import { MainTitle } from "@/components/Title";
+import { adminDb } from "@/app/lib/firebaseAdmin";
 
 export const metadata = {
   title: "PARTICIPANTS - 99haus",
   description: "프로젝트 참여자들을 소개합니다.",
 };
 
-const artistData = [
-  {
-    artist: "뚱이 PATRICK",
-    job: "배우",
-    social: "@대충인스타아이디",
-    href: "https://instagram.com/대충인스타아이디",
-    image: "/images/sample1.jpg",
-    imageAlt: "sample 1",
-  },
-  {
-    artist: "스폰지밥 SPONGEBOB",
-    job: "배우",
-    social: "@대충인스타아이디",
-    href: "https://instagram.com/대충인스타아이디",
-    image: "/images/sample2.jpg",
-    imageAlt: "sample 2",
-  },
-];
+interface Artist {
+  image: string;
+  imageAlt: string;
+  artist: string;
+  job: string;
+  href: string;
+  social: string;
+}
 
-export default function ParticipantsPage() {
+export default async function ParticipantsPage() {
+  const artistData = await adminDb
+    .collection("participants")
+    .orderBy("order")
+    .get()
+    .then((snapshot) => {
+      return snapshot.docs.map((doc) => {
+        const data = doc.data();
+
+        return {
+          id: doc.id,
+          artist: data.artist,
+          job: data.job,
+          social: data.social,
+          href: data.href,
+          image: data.imageUrl,
+          imageAlt: data.imageAlt,
+        } as Artist;
+      });
+    });
+
   return (
     <>
       <MainTitle title="PARTICIPANTS" subtitle="프로젝트 참여자들" />
