@@ -1,5 +1,5 @@
-import { Participants } from "../components/Cards";
-import { MainTitle } from "../components/Title";
+import { Participants } from "@/components/Cards";
+import { MainTitle } from "@/components/Title";
 
 export const metadata = {
   title: "PARTICIPANTS - 99haus",

@@ -1,4 +1,4 @@
-import { MainTitle } from "../components/Title";
+import { MainTitle } from "@/components/Title";
 
 export const metadata = {
   title: "CONTACT - 99haus",
