@@ -9,6 +9,10 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        "nanum-barun-gothic": ["var(--font-nanum-barun-gothic)"],
+        "korail-condensed": ["var(--font-korail-condensed)"],
+      },
       screens: {
         xs: "480px",
         sm: "640px",
