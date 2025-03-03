@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import AdminDashboard from "@/components/admin/dashboard/Dashboard";
