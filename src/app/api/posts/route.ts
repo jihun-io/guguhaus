@@ -139,6 +139,7 @@ export async function POST(request: NextRequest) {
 
       // 생성 시간 추가
       postData.createdAt = now;
+      postData.isDeleted = false;
 
       // 자동 생성 ID로 문서 생성
       const docRef = await postsCollection.add(postData);
@@ -163,6 +164,14 @@ export async function GET(request: NextRequest) {
     const category = searchParams.get("category");
     const postId = searchParams.get("postId");
     const id = searchParams.get("id");
+    let includeDeleted = searchParams.get("includeDeleted") === "true";
+
+    // 세션 확인 - 로그인된 사용자만 삭제된 포스트 조회 가능
+    const session = await getServerSession(authOptions);
+    if (!session || !session.user) {
+      // 세션이 없으면 includeDeleted 옵션은 항상 false로 설정
+      includeDeleted = false;
+    }
 
     // 컬렉션은 항상 'posts'
     const collectionName = "posts";
@@ -179,18 +188,32 @@ export async function GET(request: NextRequest) {
         );
       }
 
+      const postData = doc.data();
+
+      // 삭제된 포스트는 includeDeleted 파라미터가 true일 때만 반환
+      if (postData?.isDeleted && !includeDeleted) {
+        return NextResponse.json(
+          { message: "포스트를 찾을 수 없습니다." },
+          { status: 404 }
+        );
+      }
+
       return NextResponse.json({
         id: doc.id,
-        ...doc.data(),
+        ...postData,
       });
     }
 
     // postId로 조회
     if (postId) {
-      const snapshot = await postsCollection
-        .where("postId", "==", postId)
-        .limit(1)
-        .get();
+      let query = postsCollection.where("postId", "==", postId);
+
+      // 삭제된 포스트 제외 (includeDeleted가 true인 경우 제외하지 않음)
+      if (!includeDeleted) {
+        query = query.where("isDeleted", "in", [false, null]);
+      }
+
+      const snapshot = await query.limit(1).get();
 
       if (snapshot.empty) {
         return NextResponse.json(
@@ -212,6 +235,11 @@ export async function GET(request: NextRequest) {
     // 카테고리 필터링
     if (category) {
       query = query.where("category", "==", category);
+    }
+
+    // 삭제된 포스트 제외 (includeDeleted가 true인 경우 제외하지 않음)
+    if (!includeDeleted) {
+      query = query.where("isDeleted", "in", [false, null]);
     }
 
     // 최신순으로 정렬
@@ -251,10 +279,14 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ message: "ID가 필요합니다" }, { status: 400 });
     }
 
-    // 모든 포스트는 'posts' 컬렉션에서 삭제
+    // 모든 포스트는 'posts' 컬렉션에서 소프트 딜리트
     const collectionName = "posts";
 
-    await adminDb.collection(collectionName).doc(id).delete();
+    // 소프트 딜리트: 실제 삭제 대신 isDeleted 필드를 true로 설정
+    await adminDb.collection(collectionName).doc(id).update({
+      isDeleted: true,
+      deletedAt: new Date().toISOString(),
+    });
 
     return NextResponse.json({ message: "포스트가 삭제되었습니다" });
   } catch (e) {
