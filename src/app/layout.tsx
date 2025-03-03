@@ -15,6 +15,27 @@ import Footer from "@/components/Footer";
 //   weight: "100 900",
 // });
 
+const korailCondensed = localFont({
+  src: "./fonts/KORAILCondensed-Regular.woff2",
+  variable: "--font-korail-condensed",
+});
+
+const nanumBarunGothic = localFont({
+  src: [
+    {
+      path: "./fonts/NanumBarunGothic.woff",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "./fonts/NanumBarunGothicBold.woff",
+      weight: "700",
+      style: "normal",
+    },
+  ],
+  variable: "--font-nanum-barun-gothic",
+});
+
 export const metadata: Metadata = {
   title: "99haus",
   description: "99haus by Jun Park",
@@ -28,10 +49,14 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body
-        className={`px-8 min-h-screen grid grid-rows-[auto,1fr,auto] prose-p:text-foreground prose-headings:text-foreground overflow-y-scroll`}
+        className={`px-8 min-h-screen grid grid-rows-[auto,1fr,auto] prose-p:text-foreground prose-headings:text-foreground overflow-y-scroll
+          ${nanumBarunGothic.variable} ${korailCondensed.variable} font-nanum-barun-gothic
+          `}
       >
         <Header />
-        <main className="flex flex-col py-16 min-h-full">{children}</main>
+        <main className="flex flex-col py-16 min-h-full w-full mx-auto">
+          {children}
+        </main>
         <Footer />
       </body>
     </html>
