@@ -42,7 +42,7 @@ function H2({ children }: Readonly<{ children: React.ReactNode }>) {
 
 export function WIPCard({ data }: Readonly<CardProps>) {
   return (
-    <Link href={data.href} className="flex flex-col w-fit h-fit">
+    <Link href={data.href} className="flex flex-col w-fit h-fit leading-5">
       <Image
         className="aspect-square object-cover w-full my-0"
         src={data.image}
@@ -50,9 +50,10 @@ export function WIPCard({ data }: Readonly<CardProps>) {
         width={480}
         height={480}
       />
-      <h3 className="mt-2 mb-0">{data.title}</h3>
-      <p className="my-0">{data.genre}</p>
-      <p className="my-0">@{new Date(data.createdAt).getFullYear()}</p>
+      <h3 className="mt-2 my-0 leading-5">{data.title}</h3>
+      <p className="my-0">
+        {data.genre}, {new Date(data.createdAt).getFullYear()}
+      </p>
     </Link>
   );
 }
@@ -120,12 +121,10 @@ function HistoryCard({ data }: Readonly<CardProps>) {
         height={210}
         className="w-full object-cover  aspect-[210/297] my-0"
       />
-      <h3 className="my-2 leading-6">{data.title}</h3>
-      <p className="my-2 leading-4 uppercase">{data.titleEng}</p>
-      <p className="my-0">{data.category}</p>
-      <p className="my-0">
-        @{year}
-        {month}
+      <h3 className="mt-2 mb-0 leading-6">{data.title}</h3>
+      <p className="my-0 text-sm leading-4 uppercase">{data.titleEng}</p>
+      <p className="mt-2 leading-5">
+        {data.category}, {year}
       </p>
     </Link>
   );
@@ -150,11 +149,15 @@ function ParticipantsCard({ data }: Readonly<ParticipantsProps>) {
         alt={data.imageAlt}
         width={480}
         height={480}
-        className="w-full aspect-square object-cover "
+        className="w-full aspect-square object-cover"
       />
-      <h3 className="my-0">{data.artist}</h3>
-      <p className="my-0">{data.job}</p>
-      <a href={data.href} target="_blank" className="my-0 not-prose underline">
+      <h3 className="my-0 leading-6">{data.artist}</h3>
+      <p className="my-0 leading-6">{data.job}</p>
+      <a
+        href={data.href}
+        target="_blank"
+        className="text-sm my-0 not-prose underline"
+      >
         {data.social}
       </a>
     </article>

@@ -7,8 +7,8 @@ export function MainTitle({
 }) {
   return (
     <>
-      <h2 className="text-3xl font-bold">{title}</h2>
-      <p>{subtitle}</p>
+      <h2 className="text-3xl font-bold ">{title}</h2>
+      <p className="text-xs">{subtitle}</p>
     </>
   );
 }

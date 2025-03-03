@@ -76,7 +76,11 @@ export default function Header() {
         `}
         >
           {menuItems.map((item) => (
-            <li key={item.href} role="menuitem">
+            <li
+              key={item.href}
+              role="menuitem"
+              className="font-korail-condensed"
+            >
               <Link
                 href={item.href}
                 onClick={() => setIsMenuOpen(false)}
