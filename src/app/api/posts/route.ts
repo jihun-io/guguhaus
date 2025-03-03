@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { adminDb, adminStorage } from "@/app/lib/firebaseAdmin";
 import { getServerSession } from "next-auth";
 import sharp from "sharp";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/auth/auth";
 import {
   CollectionReference,
   DocumentData,
