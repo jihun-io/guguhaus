@@ -8,6 +8,7 @@ import {
   DocumentData,
   Query,
 } from "firebase-admin/firestore";
+import { PostTypes } from "@/types/post";
 
 export async function POST(request: NextRequest) {
   try {
@@ -26,7 +27,10 @@ export async function POST(request: NextRequest) {
       id = formData.get("id") as string;
     }
 
-    const category = formData.get("category") as string;
+    const category = formData.get("category") as
+      | "Work In Progress"
+      | "Articles"
+      | "History";
     const postId = formData.get("postId") as string;
     const originalPostId = (formData.get("originalPostId") as string) || null; // 수정 시 원래 postId
     const title = formData.get("title") as string;
@@ -37,7 +41,7 @@ export async function POST(request: NextRequest) {
     const now = new Date().toISOString();
 
     // 기본 데이터
-    let postData: any = {
+    const postData: PostTypes = {
       title,
       postId,
       content,
@@ -49,13 +53,17 @@ export async function POST(request: NextRequest) {
 
     // 카테고리별 특수 필드
     if (category === "Work In Progress") {
-      postData.genre = formData.get("genre") as string;
+      postData.genre = formData.get("genre") as PostTypes["genre"];
     } else if (category === "Articles") {
-      postData.articleCategory = formData.get("articleCategory") as string;
-      postData.desc = formData.get("desc") as string;
+      postData.articleCategory = formData.get(
+        "articleCategory"
+      ) as PostTypes["articleCategory"];
+      postData.desc = formData.get("desc") as PostTypes["desc"];
     } else if (category === "History") {
-      postData.titleEng = formData.get("titleEng") as string;
-      postData.historyCategory = formData.get("historyCategory") as string;
+      postData.titleEng = formData.get("titleEng") as PostTypes["titleEng"];
+      postData.historyCategory = formData.get(
+        "historyCategory"
+      ) as PostTypes["historyCategory"];
     }
 
     // 이미지 파일 처리
@@ -116,7 +124,9 @@ export async function POST(request: NextRequest) {
       }
 
       // 문서 업데이트
-      await postsCollection.doc(id).update(postData);
+      await postsCollection
+        .doc(id)
+        .update(postData as FirebaseFirestore.UpdateData<PostTypes>);
       return NextResponse.json({
         message: "포스트가 수정되었습니다",
         id,
