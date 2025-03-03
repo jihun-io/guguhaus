@@ -113,9 +113,8 @@ function SortableRow({
           <MoveVertical className="h-4 w-4 text-zinc-400" />
         </div>
       </TableCell>
-      <TableCell>{participant.artist}</TableCell>
+      <TableCell className="whitespace-nowrap">{participant.artist}</TableCell>
       <TableCell>{participant.job}</TableCell>
-      <TableCell>{participant.social}</TableCell>
       <TableCell>
         <Button
           variant="ghost"
@@ -477,7 +476,6 @@ export function ParticipantsManager() {
         </div>
       </form>
 
-      <div className="bg-zinc-800 p-4 rounded-md"></div>
       <p className="text-zinc-300 mb-2 flex items-center">
         <MoveVertical className="mr-2 h-4 w-4" />
         목록을 드래그하여 참가자 순서를 변경할 수 있습니다.
@@ -488,14 +486,13 @@ export function ParticipantsManager() {
         collisionDetection={closestCenter}
         onDragEnd={handleDragEnd}
       >
-        <Table className="bg-zinc-800 text-zinc-100 overflow-hidden">
+        <Table className="break-keep bg-zinc-800 text-zinc-100 overflow-x-scroll">
           <TableHeader>
             <TableRow>
               <TableHead className="text-zinc-300 w-10"></TableHead>
               <TableHead className="text-zinc-300">이름</TableHead>
               <TableHead className="text-zinc-300">직업</TableHead>
-              <TableHead className="text-zinc-300">소셜 미디어</TableHead>
-              <TableHead className="text-zinc-300">액션</TableHead>
+              <TableHead className="text-zinc-300"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
