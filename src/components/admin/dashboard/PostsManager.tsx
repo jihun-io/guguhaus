@@ -239,7 +239,7 @@ export function PostEditor({
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setValue("data.image.file", file as any);
+      setValue("data.image.file", file as File);
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
@@ -357,11 +357,16 @@ export function PostEditor({
         setImagePreview(null);
         setContent("");
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("포스트 저장 오류:", error);
-      alert(
-        error.response?.data?.message || "포스트 저장 중 오류가 발생했습니다."
-      );
+      // 에러 타입 가드를 사용하여 안전하게 처리
+      if (axios.isAxiosError(error)) {
+        alert(
+          error.response?.data?.message || "포스트 저장 중 오류가 발생했습니다."
+        );
+      } else {
+        alert("포스트 저장 중 오류가 발생했습니다.");
+      }
     } finally {
       setIsSubmitting(false);
     }

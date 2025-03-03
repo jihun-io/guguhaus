@@ -36,6 +36,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { ParticipantType } from "@/types/participant";
 
 // 인터페이스에 order 속성 추가
 interface Participant {
@@ -167,7 +168,7 @@ export function ParticipantsManager() {
       }
 
       // 데이터 구조 맞추기
-      const formattedData = res.data.map((participant: any) => ({
+      const formattedData = res.data.map((participant: ParticipantType) => ({
         ...participant,
         order: participant.order || 0, // order 속성이 없으면 0 기본값
         image: {
@@ -291,12 +292,11 @@ export function ParticipantsManager() {
       await fetchParticipants();
 
       setErrorMsg(null);
-    } catch (error) {
-      const err = error as any;
-      if (isAxiosError(err)) {
-        setErrorMsg(err.response?.data.message);
+    } catch (error: unknown) {
+      if (isAxiosError(error)) {
+        setErrorMsg(error.response?.data.message);
       } else {
-        setErrorMsg(err.message);
+        setErrorMsg("참가자 추가에 실패했습니다.");
       }
     }
   };
@@ -305,12 +305,11 @@ export function ParticipantsManager() {
     try {
       await axios.delete(`/api/participants?id=${id}`);
       await fetchParticipants();
-    } catch (error) {
-      const err = error as any;
-      if (isAxiosError(err)) {
-        setErrorMsg(err.response?.data.message);
+    } catch (error: unknown) {
+      if (isAxiosError(error)) {
+        setErrorMsg(error.response?.data.message);
       } else {
-        setErrorMsg(err.message);
+        setErrorMsg("참가자 삭제에 실패했습니다.");
       }
     }
   };

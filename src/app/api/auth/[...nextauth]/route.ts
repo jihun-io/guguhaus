@@ -5,6 +5,7 @@ import { compare } from "bcryptjs";
 
 interface CustomUser extends User {
   userId: string;
+  username: string;
 }
 
 export const authOptions: NextAuthOptions = {
@@ -52,7 +53,7 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id;
         token.userId = (user as CustomUser).userId;
-        token.username = (user as any).username; // username 속성 추가
+        token.username = (user as CustomUser).username; // username 속성 추가
       }
       return token;
     },
