@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ParticipantsManager } from "./ParticipantsManager";
+import { PostEditor } from "./PostsManager";
+import { PostsBoard } from "./PostsBoard";
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("wip");
@@ -15,56 +17,39 @@ export default function AdminDashboard() {
       onValueChange={setActiveTab}
       className="space-y-4"
     >
-      <TabsList className="w-full h-fit flex flex-wrap justify-around gap-x-4 gap-y-2">
-        <TabsTrigger className="break-words h-full" value="wip">
-          Work In Progress
+      <TabsList className="w-full h-fit grid grid-cols-1 xs:grid-cols-4 justify-around gap-x-4 gap-y-2">
+        <TabsTrigger className="break-words h-full w-full" value="write">
+          포스트 작성
         </TabsTrigger>
-        <TabsTrigger className="break-words h-full" value="articles">
-          Articles
+        <TabsTrigger className="break-words h-full w-full" value="lists">
+          포스트 목록
         </TabsTrigger>
-        <TabsTrigger className="break-words h-full" value="history">
-          History
-        </TabsTrigger>
-        <TabsTrigger className="break-words h-full" value="participants">
+        <TabsTrigger className="break-words h-full w-full" value="participants">
           Participants
         </TabsTrigger>
-        <TabsTrigger className="break-words h-full" value="account">
+        <TabsTrigger className="break-words h-full w-full" value="account">
           계정 관리
         </TabsTrigger>
       </TabsList>
 
-      <TabsContent value="wip">
+      <TabsContent value="write">
         <Card>
           <CardHeader>
-            <CardTitle>Work In Progress</CardTitle>
+            <CardTitle>포스트 작성</CardTitle>
           </CardHeader>
           <CardContent>
-            <Button className="mb-4">새 WIP 추가</Button>
-            {/* WIP 목록 및 관리 UI */}
+            <PostEditor />
           </CardContent>
         </Card>
       </TabsContent>
 
-      <TabsContent value="articles">
+      <TabsContent value="lists">
         <Card>
           <CardHeader>
-            <CardTitle>Articles</CardTitle>
+            <CardTitle>포스트 목록</CardTitle>
           </CardHeader>
           <CardContent>
-            <Button className="mb-4">새 Article 추가</Button>
-            {/* Articles 목록 및 관리 UI */}
-          </CardContent>
-        </Card>
-      </TabsContent>
-
-      <TabsContent value="history">
-        <Card>
-          <CardHeader>
-            <CardTitle>History</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Button className="mb-4">새 History 추가</Button>
-            {/* History 목록 및 관리 UI */}
+            <PostsBoard />
           </CardContent>
         </Card>
       </TabsContent>
@@ -74,7 +59,7 @@ export default function AdminDashboard() {
           <CardHeader>
             <CardTitle>Participants</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="px-4">
             <ParticipantsManager />
           </CardContent>
         </Card>
