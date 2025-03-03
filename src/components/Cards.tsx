@@ -7,11 +7,13 @@ interface CardProps {
     titleEng?: string;
     genre?: string;
     year?: string;
-    href: string;
+    href?: string;
+    postId: string;
     image: string;
     imageAlt: string;
     desc?: string;
     category?: string;
+    articleCategory?: string;
     createdAt: string;
     updatedAt: string;
   };
@@ -42,7 +44,7 @@ function H2({ children }: Readonly<{ children: React.ReactNode }>) {
 
 export function WIPCard({ data }: Readonly<CardProps>) {
   return (
-    <Link href={data.href} className="flex flex-col w-fit h-fit leading-5">
+    <Link href={data.postId} className="flex flex-col w-fit h-fit leading-5">
       <Image
         className="aspect-square object-cover w-full my-0"
         src={data.image}
@@ -73,7 +75,7 @@ export function WorkInProgress({
 
 function ArticlesCard({ data }: Readonly<CardProps>) {
   return (
-    <Link href={data.href} className="relative w-full h-full aspect-square">
+    <Link href={data.postId} className="relative w-full h-full aspect-square">
       <Image
         src={data.image}
         alt={data.imageAlt}
@@ -86,7 +88,7 @@ function ArticlesCard({ data }: Readonly<CardProps>) {
       </h3>
       <div className="absolute bottom-0 left-0 p-4">
         <p className="my-0 text-2xl font-bold font-outline-1">
-          {data.category}
+          {data.articleCategory}
         </p>
         <p className="my-0 font-outline-base font-bold leading-4">
           {data.desc}
@@ -113,7 +115,7 @@ function HistoryCard({ data }: Readonly<CardProps>) {
     month: "2-digit",
   });
   return (
-    <Link href={data.href} className="w-full h-full">
+    <Link href={data.postId} className="w-full h-full">
       <Image
         src={data.image}
         alt={data.imageAlt}
