@@ -22,9 +22,9 @@ interface Post {
 }
 
 export default async function Home() {
-  let wipData: Post[] = [];
-  let articlesData: Post[] = [];
-  let historyData: Post[] = [];
+  const wipData: Post[] = [];
+  const articlesData: Post[] = [];
+  const historyData: Post[] = [];
 
   const totalData = await adminDb
     .collection("posts")
@@ -42,6 +42,7 @@ export default async function Home() {
             desc: data.desc,
             genre: data.genre,
             articleCategory: data.articleCategory,
+            historyCategory: data.historyCategory,
             titleEng: data.titleEng,
             image: data.imageUrl,
             imageAlt: data.imageAlt,
