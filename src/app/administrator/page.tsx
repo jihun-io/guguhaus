@@ -19,7 +19,7 @@ export default async function AdminPage() {
   };
 
   return (
-    <div className="min-h-full bg-zinc-900 text-zinc-100 p-8">
+    <div className="min-h-full bg-zinc-900 text-zinc-100 p-4">
       <div className="max-w-7xl mx-auto">
         <header className="flex justify-between items-start mb-8">
           <h1 className="text-3xl font-bold">대시보드</h1>
