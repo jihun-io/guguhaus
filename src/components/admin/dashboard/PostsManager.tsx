@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -17,6 +17,26 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import TiptapEditor from "../editor/TiptapEditor";
 import axios from "axios";
+
+interface PostEditorProps {
+  initialData?: {
+    id?: string;
+    category: "Work In Progress" | "Articles" | "History";
+    postId: string;
+    title: string;
+    content?: string;
+    imageUrl?: string;
+    imageAlt?: string;
+    date?: string;
+    genre?: string;
+    articleCategory?: string;
+    desc?: string;
+    titleEng?: string;
+    historyCategory?: string;
+  } | null;
+  isEditing?: boolean;
+  onEditSuccess?: () => void;
+}
 
 const imageSchema = z
   .object({
@@ -67,7 +87,6 @@ const wipSchema = baseSchema.extend({
 const articlesSchema = baseSchema.extend({
   category: z.string().min(1, "카테고리는 필수입니다"),
   desc: z.string().min(1, "설명은 필수입니다"),
-  date: z.string().regex(/^\d{4}-\d{2}$/, "YYYY-MM 형식이어야 합니다"),
 });
 
 const historySchema = baseSchema.extend({
@@ -84,10 +103,63 @@ const postSchema = z.discriminatedUnion("category", [
 
 type PostData = z.infer<typeof postSchema>;
 
-export function PostEditor() {
-  const [category, setCategory] = useState<string>("Work In Progress");
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [content, setContent] = useState("");
+export function PostEditor({
+  initialData = null,
+  isEditing = false,
+  onEditSuccess = () => {},
+}: PostEditorProps) {
+  const [category, setCategory] = useState<string>(
+    initialData?.category || "Work In Progress"
+  );
+  const [imagePreview, setImagePreview] = useState<string | null>(
+    initialData?.imageUrl || null
+  );
+  const [content, setContent] = useState(initialData?.content || "");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // 카테고리별로 올바른 타입의 기본값을 설정하는 함수
+  const getDefaultValues = () => {
+    const baseData = {
+      id: initialData?.id || undefined,
+      title: initialData?.title || "",
+      postId: initialData?.postId || "",
+      content: initialData?.content || "",
+      image: {
+        file: undefined,
+        url: initialData?.imageUrl || "",
+      },
+      imageAlt: initialData?.imageAlt || "",
+      date: initialData?.date || "",
+    };
+
+    if (!initialData || initialData.category === "Work In Progress") {
+      return {
+        category: "Work In Progress" as const,
+        data: {
+          ...baseData,
+          genre: initialData?.genre || "",
+        },
+      };
+    } else if (initialData.category === "Articles") {
+      return {
+        category: "Articles" as const,
+        data: {
+          ...baseData,
+          category: initialData.articleCategory || "",
+          desc: initialData.desc || "",
+        },
+      };
+    } else {
+      return {
+        category: "History" as const,
+        data: {
+          ...baseData,
+          titleEng: initialData.titleEng || "",
+          category: initialData.historyCategory || "",
+        },
+      };
+    }
+  };
 
   const {
     register,
@@ -95,23 +167,74 @@ export function PostEditor() {
     formState: { errors },
     setValue,
     reset,
-    watch,
     control,
   } = useForm<PostData>({
     resolver: zodResolver(postSchema),
-    defaultValues: {
-      category: "Work In Progress",
-      data: {
-        title: "",
-        postId: "",
-        content: "",
-        image: { file: undefined, url: "" },
-        imageAlt: "",
-        genre: "",
-        date: "",
-      },
-    },
+    defaultValues: getDefaultValues(),
   });
+
+  useEffect(() => {
+    if (initialData) {
+      setCategory(initialData.category);
+      setImagePreview(initialData.imageUrl || null);
+      setContent(initialData.content || "");
+
+      // 카테고리에 따라 타입 안전하게 reset 호출
+      if (initialData.category === "Work In Progress") {
+        reset({
+          category: "Work In Progress" as const,
+          data: {
+            id: initialData.id,
+            title: initialData.title,
+            postId: initialData.postId,
+            content: initialData.content || "",
+            image: {
+              file: undefined,
+              url: initialData.imageUrl || "",
+            },
+            imageAlt: initialData.imageAlt || "",
+            date: initialData.date || "",
+            genre: initialData.genre || "",
+          },
+        });
+      } else if (initialData.category === "Articles") {
+        reset({
+          category: "Articles" as const,
+          data: {
+            id: initialData.id,
+            title: initialData.title,
+            postId: initialData.postId,
+            content: initialData.content || "",
+            image: {
+              file: undefined,
+              url: initialData.imageUrl || "",
+            },
+            imageAlt: initialData.imageAlt || "",
+            category: initialData.articleCategory || "",
+            desc: initialData.desc || "",
+          },
+        });
+      } else if (initialData.category === "History") {
+        reset({
+          category: "History" as const,
+          data: {
+            id: initialData.id,
+            title: initialData.title,
+            postId: initialData.postId,
+            content: initialData.content || "",
+            image: {
+              file: undefined,
+              url: initialData.imageUrl || "",
+            },
+            imageAlt: initialData.imageAlt || "",
+            date: initialData.date || "",
+            titleEng: initialData.titleEng || "",
+            category: initialData.historyCategory || "",
+          },
+        });
+      }
+    }
+  }, [initialData, reset]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -125,58 +248,100 @@ export function PostEditor() {
     }
   };
 
-  // 제목이 변경될 때 자동으로 postId 생성하는 함수
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const title = e.target.value;
     setValue("data.title", title);
 
-    // 제목을 기반으로 URL 친화적인 postId 생성
-    const postId = title
-      .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, "") // 허용된 문자만 남김
-      .replace(/\s+/g, "-") // 공백을 하이픈으로 교체
-      .replace(/-+/g, "-"); // 중복 하이픈 제거
+    if (!isEditing || !initialData?.postId) {
+      const postId = title
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, "")
+        .replace(/\s+/g, "-")
+        .replace(/-+/g, "-");
 
-    setValue("data.postId", postId);
+      setValue("data.postId", postId);
+    }
   };
 
   const onSubmit = async (data: PostData) => {
-    console.log(data);
+    setIsSubmitting(true);
     try {
       const formData = new FormData();
 
-      // ID가 있는 경우 (수정)
-      if (data.data.id) {
-        formData.append("id", data.data.id);
+      // id 속성 처리 - 공통 필드에 안전하게 접근
+      const postId = "id" in data.data ? data.data.id : undefined;
+      if (postId || initialData?.id) {
+        formData.append("id", postId || initialData?.id || "");
       }
 
-      // 공통 필드
+      // 나머지 공통 필드 처리
+      if (isEditing && initialData?.postId) {
+        formData.append("originalPostId", initialData.postId);
+      }
+
       formData.append("category", data.category);
-      formData.append("postId", data.data.postId);
-      formData.append("title", data.data.title);
-      formData.append("content", data.data.content || "");
-      formData.append("imageAlt", data.data.imageAlt);
-      formData.append("date", data.data.date);
 
-      // 이미지 처리
-      if (data.data.image.file) {
-        formData.append("imageFile", data.data.image.file);
-      } else if (data.data.image.url) {
-        formData.append("imageUrl", data.data.image.url);
-      }
-
-      // 카테고리별 특수 필드
+      // 카테고리별 타입 캐스팅 후 공통 필드 접근
       if (data.category === "Work In Progress") {
-        formData.append("genre", (data.data as any).genre);
+        const wipData = data.data as z.infer<typeof wipSchema>;
+        formData.append("postId", wipData.postId);
+        formData.append("title", wipData.title);
+        formData.append("content", wipData.content || "");
+        formData.append("imageAlt", wipData.imageAlt);
+        formData.append("date", wipData.date);
+
+        // 이미지 처리
+        if (wipData.image.file) {
+          formData.append("imageFile", wipData.image.file);
+        } else if (wipData.image.url) {
+          formData.append("imageUrl", wipData.image.url);
+        } else if (initialData?.imageUrl) {
+          formData.append("imageUrl", initialData.imageUrl);
+        }
+
+        // Work In Progress 특화 필드
+        formData.append("genre", wipData.genre);
       } else if (data.category === "Articles") {
-        formData.append("articleCategory", (data.data as any).category);
-        formData.append("desc", (data.data as any).desc);
+        const articlesData = data.data as z.infer<typeof articlesSchema>;
+        formData.append("postId", articlesData.postId);
+        formData.append("title", articlesData.title);
+        formData.append("content", articlesData.content || "");
+        formData.append("imageAlt", articlesData.imageAlt);
+
+        // 이미지 처리
+        if (articlesData.image.file) {
+          formData.append("imageFile", articlesData.image.file);
+        } else if (articlesData.image.url) {
+          formData.append("imageUrl", articlesData.image.url);
+        } else if (initialData?.imageUrl) {
+          formData.append("imageUrl", initialData.imageUrl);
+        }
+
+        // Articles 특화 필드
+        formData.append("articleCategory", articlesData.category);
+        formData.append("desc", articlesData.desc);
       } else if (data.category === "History") {
-        formData.append("titleEng", (data.data as any).titleEng);
-        formData.append("historyCategory", (data.data as any).category);
+        const historyData = data.data as z.infer<typeof historySchema>;
+        formData.append("postId", historyData.postId);
+        formData.append("title", historyData.title);
+        formData.append("content", historyData.content || "");
+        formData.append("imageAlt", historyData.imageAlt);
+        formData.append("date", historyData.date);
+
+        // 이미지 처리
+        if (historyData.image.file) {
+          formData.append("imageFile", historyData.image.file);
+        } else if (historyData.image.url) {
+          formData.append("imageUrl", historyData.image.url);
+        } else if (initialData?.imageUrl) {
+          formData.append("imageUrl", initialData.imageUrl);
+        }
+
+        // History 특화 필드
+        formData.append("titleEng", historyData.titleEng);
+        formData.append("historyCategory", historyData.category);
       }
 
-      // API 호출
       const response = await axios.post("/api/posts", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -185,63 +350,88 @@ export function PostEditor() {
 
       alert(response.data.message);
 
-      // 성공 후 폼 초기화 또는 다른 작업 수행
-      reset();
-      setImagePreview(null);
-      setContent("");
-    } catch (error) {
+      if (isEditing && onEditSuccess) {
+        onEditSuccess();
+      } else {
+        reset();
+        setImagePreview(null);
+        setContent("");
+      }
+    } catch (error: any) {
       console.error("포스트 저장 오류:", error);
-      alert("포스트 저장 중 오류가 발생했습니다.");
+      alert(
+        error.response?.data?.message || "포스트 저장 중 오류가 발생했습니다."
+      );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  // 카테고리 변경 시 폼 필드 재설정
   const handleCategoryChange = (value: string) => {
     if (
       value === "Work In Progress" ||
       value === "Articles" ||
       value === "History"
     ) {
-      // 타입 안전성을 위한 타입 가드
       setCategory(value);
       setValue(
         "category",
         value as "Work In Progress" | "Articles" | "History"
       );
 
-      // 카테고리에 따라 기본값 재설정
-      const currentDate = new Date().toISOString();
+      const baseData = {
+        id: initialData?.id || undefined,
+        title: isEditing ? initialData?.title || "" : "",
+        postId: isEditing ? initialData?.postId || "" : "",
+        content: isEditing ? initialData?.content || "" : "",
+        image: {
+          file: undefined,
+          url: isEditing ? initialData?.imageUrl || "" : "",
+        },
+        imageAlt: isEditing ? initialData?.imageAlt || "" : "",
+        date: isEditing ? initialData?.date || "" : "",
+      };
+
       if (value === "Work In Progress") {
-        setValue("data", {
-          title: "",
-          postId: "",
-          content: "", // content 추가
-          image: { file: undefined, url: "" },
-          imageAlt: "",
-          genre: "",
-          date: "",
+        reset({
+          category: "Work In Progress" as const,
+          data: {
+            ...baseData,
+            genre:
+              isEditing && initialData?.category === value
+                ? initialData?.genre || ""
+                : "",
+          } as z.infer<typeof wipSchema>, // 이 부분이 중요: 타입 캐스팅
         });
       } else if (value === "Articles") {
-        setValue("data", {
-          title: "",
-          postId: "",
-          content: "", // content 추가
-          image: { file: undefined, url: "" },
-          imageAlt: "",
-          category: "",
-          desc: "",
-          date: "",
+        reset({
+          category: "Articles" as const,
+          data: {
+            ...baseData,
+            category:
+              isEditing && initialData?.category === value
+                ? initialData?.articleCategory || ""
+                : "",
+            desc:
+              isEditing && initialData?.category === value
+                ? initialData?.desc || ""
+                : "",
+          } as z.infer<typeof articlesSchema>, // 타입 캐스팅
         });
       } else if (value === "History") {
-        setValue("data", {
-          title: "",
-          postId: "",
-          content: "", // content 추가
-          image: { file: undefined, url: "" },
-          imageAlt: "",
-          titleEng: "",
-          category: "",
-          date: "",
+        reset({
+          category: "History" as const,
+          data: {
+            ...baseData,
+            titleEng:
+              isEditing && initialData?.category === value
+                ? initialData?.titleEng || ""
+                : "",
+            category:
+              isEditing && initialData?.category === value
+                ? initialData?.historyCategory || ""
+                : "",
+          } as z.infer<typeof historySchema>, // 타입 캐스팅
         });
       }
     }
@@ -254,7 +444,6 @@ export function PostEditor() {
       })}
       className="space-y-4"
     >
-      {/* 카테고리 필드 */}
       <div>
         <Label htmlFor="category">카테고리</Label>
         <Controller
@@ -267,6 +456,7 @@ export function PostEditor() {
                 handleCategoryChange(value);
               }}
               defaultValue={field.value}
+              value={field.value}
             >
               <SelectTrigger>
                 <SelectValue placeholder="카테고리 선택" />
@@ -286,10 +476,14 @@ export function PostEditor() {
         )}
       </div>
 
-      {/* 공통 필드 */}
       <div>
         <Label htmlFor="title">제목</Label>
-        <Input id="title" onChange={handleTitleChange} />
+        <Input
+          id="title"
+          {...register("data.title")}
+          onChange={handleTitleChange}
+          defaultValue={initialData?.title || ""}
+        />
         {errors.data && "title" in errors.data && (
           <p className="text-red-500 text-sm mt-1">
             {errors.data.title?.message}
@@ -297,14 +491,19 @@ export function PostEditor() {
         )}
       </div>
 
-      {/* 포스트 ID 필드 */}
       <div>
         <Label htmlFor="postId">포스트 ID</Label>
         <Input
           id="postId"
           {...register("data.postId")}
           placeholder="예: my-first-post"
+          defaultValue={initialData?.postId || ""}
         />
+        {isEditing && (
+          <p className="text-amber-500 text-xs mt-1">
+            포스트 ID를 변경하면 기존 URL이 작동하지 않게 됩니다.
+          </p>
+        )}
         <p className="text-xs text-gray-500 mt-1">
           URL에 사용될 ID입니다. 영문 소문자, 숫자, 하이픈(-)만 허용됩니다.
         </p>
@@ -315,15 +514,32 @@ export function PostEditor() {
         )}
       </div>
 
-      {/* 카테고리별 고유 필드 */}
       {category === "Work In Progress" && (
         <>
           <div>
             <Label htmlFor="genre">장르</Label>
-            <Input id="genre" {...register("data.genre")} />
+            <Input
+              id="genre"
+              {...register("data.genre")}
+              defaultValue={initialData?.genre || ""}
+            />
             {errors.data && "genre" in errors.data && (
               <p className="text-red-500 text-sm mt-1">
                 {errors.data.genre?.message}
+              </p>
+            )}
+          </div>
+          <div>
+            <Label htmlFor="date">표시 날짜</Label>
+            <Input
+              id="date"
+              {...register("data.date")}
+              placeholder={"YYYY-MM"}
+              defaultValue={initialData?.date || ""}
+            />
+            {errors.data && "date" in errors.data && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.data.date?.message}
               </p>
             )}
           </div>
@@ -334,7 +550,11 @@ export function PostEditor() {
         <>
           <div>
             <Label htmlFor="articleCategory">카테고리</Label>
-            <Input id="articleCategory" {...register("data.category")} />
+            <Input
+              id="articleCategory"
+              {...register("data.category")}
+              defaultValue={initialData?.articleCategory || ""}
+            />
             {errors.data && "category" in errors.data && (
               <p className="text-red-500 text-sm mt-1">
                 {errors.data.category?.message}
@@ -343,7 +563,11 @@ export function PostEditor() {
           </div>
           <div>
             <Label htmlFor="desc">설명</Label>
-            <Textarea id="desc" {...register("data.desc")} />
+            <Textarea
+              id="desc"
+              {...register("data.desc")}
+              defaultValue={initialData?.desc || ""}
+            />
             {errors.data && "desc" in errors.data && (
               <p className="text-red-500 text-sm mt-1">
                 {errors.data.desc?.message}
@@ -357,7 +581,11 @@ export function PostEditor() {
         <>
           <div>
             <Label htmlFor="titleEng">영문 제목</Label>
-            <Input id="titleEng" {...register("data.titleEng")} />
+            <Input
+              id="titleEng"
+              {...register("data.titleEng")}
+              defaultValue={initialData?.titleEng || ""}
+            />
             {errors.data && "titleEng" in errors.data && (
               <p className="text-red-500 text-sm mt-1">
                 {errors.data.titleEng?.message}
@@ -366,27 +594,33 @@ export function PostEditor() {
           </div>
           <div>
             <Label htmlFor="historyCategory">카테고리</Label>
-            <Input id="historyCategory" {...register("data.category")} />
+            <Input
+              id="historyCategory"
+              {...register("data.category")}
+              defaultValue={initialData?.historyCategory || ""}
+            />
             {errors.data && "category" in errors.data && (
               <p className="text-red-500 text-sm mt-1">
                 {errors.data.category?.message}
               </p>
             )}
           </div>
+          <div>
+            <Label htmlFor="date">표시 날짜</Label>
+            <Input
+              id="date"
+              {...register("data.date")}
+              placeholder={"YYYY-MM"}
+              defaultValue={initialData?.date || ""}
+            />
+            {errors.data && "date" in errors.data && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.data.date?.message}
+              </p>
+            )}
+          </div>
         </>
       )}
-
-      {/* 공통 필드 (계속) */}
-
-      <div>
-        <Label htmlFor="date">표시 날짜</Label>
-        <Input id="date" {...register("data.date")} placeholder={"YYYY-MM"} />
-        {errors.data && "date" in errors.data && (
-          <p className="text-red-500 text-sm mt-1">
-            {errors.data.date?.message}
-          </p>
-        )}
-      </div>
 
       <div>
         <Label htmlFor="image">대표 이미지 업로드</Label>
@@ -397,11 +631,6 @@ export function PostEditor() {
           onChange={handleImageChange}
           className="bg-zinc-700 text-zinc-100 border-zinc-600"
         />
-        {errors.data?.image && (
-          <p className="text-red-500 text-sm mt-1">
-            {errors.data.image.message as string}
-          </p>
-        )}
         {imagePreview && (
           <div className="mt-2">
             <img
@@ -409,13 +638,27 @@ export function PostEditor() {
               alt="미리보기"
               className="max-w-xs h-auto"
             />
+            {isEditing && !errors.data?.image && (
+              <p className="text-xs text-gray-500 mt-1">
+                새 이미지를 업로드하지 않으면 기존 이미지가 유지됩니다.
+              </p>
+            )}
           </div>
+        )}
+        {errors.data?.image && (
+          <p className="text-red-500 text-sm mt-1">
+            {errors.data.image.message as string}
+          </p>
         )}
       </div>
 
       <div>
         <Label htmlFor="imageAlt">이미지 설명</Label>
-        <Input id="imageAlt" {...register("data.imageAlt")} />
+        <Input
+          id="imageAlt"
+          {...register("data.imageAlt")}
+          defaultValue={initialData?.imageAlt || ""}
+        />
         {errors.data?.imageAlt && (
           <p className="text-red-500 text-sm mt-1">
             {errors.data.imageAlt.message}
@@ -428,6 +671,7 @@ export function PostEditor() {
         <Controller
           name="data.content"
           control={control}
+          defaultValue={initialData?.content || ""}
           render={({ field }) => (
             <TiptapEditor
               content={field.value}
@@ -445,7 +689,9 @@ export function PostEditor() {
         )}
       </div>
 
-      <Button type="submit">저장</Button>
+      <Button type="submit" disabled={isSubmitting}>
+        {isSubmitting ? "저장 중..." : isEditing ? "수정 완료" : "저장"}
+      </Button>
     </form>
   );
 }
