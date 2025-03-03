@@ -14,7 +14,7 @@ export default function Contact() {
           saeparandol@naver.com
         </a>
         <p>특별한 문의 사항이 있을 시 위의 이메일로 연락 부탁드리겠습니다.</p>
-        <p className="uppercase">
+        <p className="uppercase text-sm">
           Please contact E-mail above for any questions
         </p>
       </article>
