@@ -49,7 +49,7 @@
     -webkit-text-stroke: 4px var(--background);
   }
 
-  // shadcn 셀렉트 박스 클릭 시 body의 padding이 변경되는 문제 해결
+  /* shadcn 셀렉트 박스 클릭 시 body의 padding이 변경되는 문제 해결 */
   body[data-scroll-locked] {
     padding-left: 2rem !important;
     padding-right: 2rem !important;
