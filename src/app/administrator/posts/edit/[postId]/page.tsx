@@ -7,13 +7,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 import axios from "axios";
 import { notFound } from "next/navigation";
+import { PostTypes } from "@/types/post";
 
 export default function EditPostPage({
   params,
 }: {
   params: { postId: string };
 }) {
-  const [post, setPost] = useState<any>(null);
+  const [post, setPost] = useState<PostTypes | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -60,7 +61,7 @@ export default function EditPostPage({
     );
   }
 
-  if (error) {
+  if (error || !post) {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <Card className="w-full max-w-2xl">
