@@ -1,5 +1,3 @@
-import Image from "next/image";
-import Link from "next/link";
 import { Articles, History, WorkInProgress } from "@/components/Cards";
 import { adminDb } from "./lib/firebaseAdmin";
 
