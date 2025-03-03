@@ -153,7 +153,7 @@ export function PostsBoard() {
                   {formatDate(post.updatedAt)}
                 </TableCell>
                 <TableCell className="flex justify-end gap-2">
-                  <Link href={`/admin/posts/view/${post.id}`}>
+                  <Link href={`/administrator/posts/view/${post.id}`}>
                     <Button
                       variant="ghost"
                       size="icon"
@@ -162,7 +162,7 @@ export function PostsBoard() {
                       <Eye className="h-4 w-4" />
                     </Button>
                   </Link>
-                  <Link href={`/admin/posts/edit/${post.id}`}>
+                  <Link href={`/administrator/posts/edit/${post.id}`}>
                     <Button
                       variant="ghost"
                       size="icon"
