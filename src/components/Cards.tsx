@@ -15,8 +15,8 @@ interface CardProps {
     category?: string;
     articleCategory?: string;
     historyCategory?: string;
-    createdAt: string;
-    updatedAt: string;
+    createdAt?: string;
+    updatedAt?: string;
   };
 }
 
@@ -27,7 +27,6 @@ interface ParticipantsProps {
     artist: string;
     job: string;
     href: string;
-    social: string;
   };
 }
 
@@ -45,7 +44,10 @@ function H2({ children }: Readonly<{ children: React.ReactNode }>) {
 
 export function WIPCard({ data }: Readonly<CardProps>) {
   return (
-    <Link href={data.postId} className="flex flex-col w-fit h-fit leading-5">
+    <Link
+      href={"wip/" + data.postId}
+      className="flex flex-col w-fit h-fit leading-5"
+    >
       <Image
         className="aspect-square object-cover w-full my-0"
         src={data.image}
@@ -55,7 +57,7 @@ export function WIPCard({ data }: Readonly<CardProps>) {
       />
       <h3 className="mt-2 my-0 leading-5">{data.title}</h3>
       <p className="my-0">
-        {data.genre}, {new Date(data.createdAt).getFullYear()}
+        {data.genre}, {data.year}
       </p>
     </Link>
   );
@@ -76,7 +78,10 @@ export function WorkInProgress({
 
 function ArticlesCard({ data }: Readonly<CardProps>) {
   return (
-    <Link href={data.postId} className="relative w-full h-full aspect-square">
+    <Link
+      href={"articles/" + data.postId}
+      className="relative w-full h-full aspect-square"
+    >
       <Image
         src={data.image}
         alt={data.imageAlt}
@@ -111,12 +116,8 @@ export function Articles({ data }: Readonly<{ data: CardProps["data"][] }>) {
 }
 
 function HistoryCard({ data }: Readonly<CardProps>) {
-  const year = new Date(data.createdAt).getFullYear();
-  const month = new Date(data.createdAt).toLocaleDateString("en-US", {
-    month: "2-digit",
-  });
   return (
-    <Link href={data.postId} className="w-full h-full">
+    <Link href={"history/" + data.postId} className="w-full h-full">
       <Image
         src={data.image}
         alt={data.imageAlt}
@@ -127,7 +128,7 @@ function HistoryCard({ data }: Readonly<CardProps>) {
       <h3 className="mt-2 mb-0 leading-6">{data.title}</h3>
       <p className="my-0 text-sm leading-4 uppercase">{data.titleEng}</p>
       <p className="mt-2 leading-5">
-        {data.historyCategory}, {year}
+        {data.historyCategory}, {data.year}
       </p>
     </Link>
   );
@@ -161,7 +162,7 @@ function ParticipantsCard({ data }: Readonly<ParticipantsProps>) {
         target="_blank"
         className="text-sm my-0 not-prose underline"
       >
-        {data.social}
+        @{data.href.split("/").reverse()[0]}
       </a>
     </article>
   );
