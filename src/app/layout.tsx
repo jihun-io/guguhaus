@@ -49,7 +49,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body
-        className={`px-8 min-h-screen grid grid-rows-[auto,1fr,auto] prose-p:text-foreground prose-headings:text-foreground overflow-y-scroll
+        className={`px-8 min-h-[100dvh] grid grid-rows-[auto,1fr,auto] prose-p:text-foreground prose-headings:text-foreground overflow-y-scroll
           ${nanumBarunGothic.variable} ${korailCondensed.variable} font-nanum-barun-gothic
           `}
       >
