@@ -1,3 +1,5 @@
+export const runtime = "edge";
+
 import PostArticle from "@/components/Posts";
 import { getContent } from "@/lib/notion";
 import Image from "next/image";

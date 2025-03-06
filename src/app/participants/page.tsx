@@ -1,6 +1,7 @@
+export const runtime = "edge";
+
 import { Participants } from "@/components/Cards";
 import { MainTitle } from "@/components/Title";
-import { adminDb } from "@/app/lib/firebaseAdmin";
 import { getParticipantsData } from "@/lib/notion";
 
 export const metadata = {
