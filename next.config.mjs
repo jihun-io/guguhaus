@@ -3,6 +3,7 @@ const nextConfig = {
   images: {
     domains: [
       "storage.googleapis.com", // Google Cloud Storage 도메인 추가
+      process.env.NOTION_URL.replace("https://", ""), // 노션 도메인 추가
     ],
   },
 };
