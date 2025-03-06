@@ -5,6 +5,12 @@ import {
   PartialPageObjectResponse,
 } from "@notionhq/client/build/src/api-endpoints";
 import { convertToPermamentUrl } from "./notionImageConverter";
+import { NotionToMarkdown } from "notion-to-md";
+
+import { unified } from "unified";
+import markdown from "remark-parse";
+import remark2rehype from "remark-rehype";
+import html from "rehype-stringify";
 
 export const notion = new NotionAPI();
 
@@ -14,6 +20,10 @@ export async function getData(rootPageId: string) {
 
 export const notionDatabase = new Client({
   auth: process.env.NOTION_SECRET,
+});
+
+export const n2m = new NotionToMarkdown({
+  notionClient: notionDatabase,
 });
 
 // WIP 데이터 인터페이스 정의
@@ -291,4 +301,345 @@ export async function getParticipantsData(): Promise<ParticipantsItem[]> {
       };
     })
     .filter((item): item is ParticipantsItem => item !== null);
+}
+
+// 타입 가드 함수 추가
+function isPageObjectResponse(obj: any): obj is PageObjectResponse {
+  return obj && "properties" in obj;
+}
+
+// 체크박스 속성인지 확인하는 타입 가드 함수
+function isCheckboxProperty(
+  property: any
+): property is { type: "checkbox"; checkbox: boolean; id: string } {
+  return (
+    property &&
+    property.type === "checkbox" &&
+    typeof property.checkbox === "boolean"
+  );
+}
+
+export async function getContent({
+  category,
+  id,
+}: {
+  category: "wip" | "articles" | "history";
+  id: string;
+}) {
+  // id는 페이지의 영문 경로
+  // 영문 경로를 가진 페이지의 ID를 먼저 가져옵니다.
+  try {
+    let dbId: string | undefined;
+
+    switch (category) {
+      case "wip":
+        dbId = process.env.NOTION_WIP_ID;
+        break;
+      case "articles":
+        dbId = process.env.NOTION_ARTICLES_ID;
+        break;
+      case "history":
+        dbId = process.env.NOTION_HISTORY_ID;
+        break;
+    }
+
+    if (!dbId) {
+      throw new Error(`${category.toUpperCase()}_ID is not defined`);
+    }
+
+    const db = await notionDatabase.databases.query({
+      database_id: dbId,
+    });
+
+    const pageDoc = db.results.find((page) => {
+      // properties가 있는지 확인
+      if (!("properties" in page) || !page.properties) {
+        return false;
+      }
+
+      const typedPage = page as PageObjectResponse;
+      const urlPath = typedPage.properties["URL 경로"];
+
+      // urlPath가 rich_text 타입인지 확인
+      if (urlPath?.type !== "rich_text") {
+        return false;
+      }
+
+      // rich_text 배열이 존재하고 비어있지 않은지 확인
+      if (!Array.isArray(urlPath.rich_text) || urlPath.rich_text.length === 0) {
+        return false;
+      }
+
+      // plain_text가 존재하고 id와 일치하는지 확인
+      return urlPath.rich_text[0].plain_text === id;
+    });
+
+    if (!pageDoc) {
+      throw new Error(`Page not found: ${id}`);
+    }
+
+    if (!isPageObjectResponse(pageDoc)) {
+      throw new Error("Page is not a PageObjectResponse");
+    }
+
+    const properties = pageDoc.properties;
+
+    if (!properties || !properties["배포"]) {
+      throw new Error("Page does not have properties or is not published");
+    }
+
+    const deployProperty = properties["배포"];
+    if (!isCheckboxProperty(deployProperty) || !deployProperty.checkbox) {
+      throw new Error("Page is not published");
+    }
+
+    const pageId = pageDoc.id;
+
+    // 생성 일시와 최종 편집 일시 가져오기
+    const createdTime = pageDoc.created_time;
+    const lastEditedTime = pageDoc.last_edited_time;
+
+    // 카테고리별 추가 속성 추출
+    let categorySpecificProperties: any = {};
+
+    switch (category) {
+      case "wip":
+        categorySpecificProperties = extractWipProperties(properties, pageId);
+        break;
+      case "articles":
+        categorySpecificProperties = extractArticleProperties(
+          properties,
+          pageId
+        );
+        break;
+      case "history":
+        categorySpecificProperties = extractHistoryProperties(
+          properties,
+          pageId
+        );
+        break;
+    }
+
+    const mdBlocks = await n2m.pageToMarkdown(pageId);
+
+    // 이미지 변환
+    const imgProcessedMdBlocks = mdBlocks.map((block) => {
+      if (block.type === "image") {
+        // 정규식 매칭 결과가 null일 수 있으므로 안전하게 처리
+        const imageUrlMatch = block.parent.match(/\(([^)]+)\)/);
+        const altTextMatch = block.parent.match(/\[([^)]+)\]/);
+
+        if (
+          !imageUrlMatch ||
+          !imageUrlMatch[1] ||
+          !altTextMatch ||
+          !altTextMatch[1]
+        ) {
+          // 매칭 실패 시 원래 블록 반환
+          return block;
+        }
+
+        const imageLink = imageUrlMatch[1];
+        const altText = altTextMatch[1];
+        const convertedImageLink = convertToPermamentUrl(
+          imageLink,
+          block.blockId
+        );
+
+        return {
+          type: "image",
+          blockId: block.blockId,
+          parent: `![${altText}](${convertedImageLink})`,
+          children: [],
+        };
+      }
+
+      return block;
+    });
+
+    // 제목 1을 h3, 제목 2를 h4, 제목 3을 h5로 변환
+    const convertedMdBlocks = imgProcessedMdBlocks.map((block) => {
+      if (block.type === "heading_1") {
+        return {
+          type: "heading_3",
+          blockId: block.blockId,
+          parent: "##" + block.parent,
+          children: block.children,
+        };
+      } else if (block.type === "heading_2") {
+        return {
+          type: "heading_4",
+          blockId: block.blockId,
+          parent: "##" + block.parent,
+          children: block.children,
+        };
+      } else if (block.type === "heading_3") {
+        return {
+          type: "heading_5",
+          blockId: block.blockId,
+          parent: "##" + block.parent,
+          children: block.children,
+        };
+      }
+
+      return block;
+    });
+
+    const mdContent = n2m.toMarkdownString(convertedMdBlocks).parent;
+
+    const htmlContent = await unified()
+      .use(markdown)
+      .use(remark2rehype)
+      .use(html)
+      .process(mdContent);
+
+    return {
+      properties: {
+        ...categorySpecificProperties,
+        createdTime,
+        lastEditedTime,
+      },
+      htmlContent: htmlContent.toString(),
+    };
+  } catch (error) {
+    console.error("getContent error:", error);
+    return;
+  }
+}
+
+// WIP 속성 추출 함수
+function extractWipProperties(properties: any, pageId: string) {
+  try {
+    const title =
+      properties["이름"]?.type === "title"
+        ? properties["이름"].title[0]?.plain_text || ""
+        : "";
+
+    const year =
+      properties["연도"]?.type === "number"
+        ? properties["연도"].number?.toString() || ""
+        : "";
+
+    const genre =
+      properties["장르"]?.type === "rich_text"
+        ? properties["장르"].rich_text[0]?.plain_text || ""
+        : "";
+
+    const thumbnail =
+      properties["섬네일"]?.type === "files" &&
+      properties["섬네일"].files[0] &&
+      "file" in properties["섬네일"].files[0]
+        ? convertToPermamentUrl(properties["섬네일"].files[0].file.url, pageId)
+        : "";
+
+    const imageAlt =
+      properties["섬네일 대체 텍스트"]?.type === "rich_text"
+        ? properties["섬네일 대체 텍스트"].rich_text[0]?.plain_text || ""
+        : "";
+
+    return {
+      title,
+      year,
+      genre,
+      thumbnail,
+      imageAlt,
+    };
+  } catch (error) {
+    console.error("Error extracting WIP properties:", error);
+    return {};
+  }
+}
+
+// 아티클 속성 추출 함수
+function extractArticleProperties(properties: any, pageId: string) {
+  try {
+    const title =
+      properties["이름"]?.type === "title"
+        ? properties["이름"].title[0]?.plain_text || ""
+        : "";
+
+    const desc =
+      properties["설명"]?.type === "rich_text"
+        ? properties["설명"].rich_text[0]?.plain_text || ""
+        : "";
+
+    const category =
+      properties["카테고리"]?.type === "select"
+        ? properties["카테고리"].select?.name || ""
+        : "";
+
+    const thumbnail =
+      properties["섬네일"]?.type === "files" &&
+      properties["섬네일"].files[0] &&
+      "file" in properties["섬네일"].files[0]
+        ? convertToPermamentUrl(properties["섬네일"].files[0].file.url, pageId)
+        : "";
+
+    const imageAlt =
+      properties["섬네일 대체 텍스트"]?.type === "rich_text"
+        ? properties["섬네일 대체 텍스트"].rich_text[0]?.plain_text || ""
+        : "";
+
+    return {
+      title,
+      desc,
+      category,
+      thumbnail,
+      imageAlt,
+    };
+  } catch (error) {
+    console.error("Error extracting Article properties:", error);
+    return {};
+  }
+}
+
+// 히스토리 속성 추출 함수
+function extractHistoryProperties(properties: any, pageId: string) {
+  try {
+    const title =
+      properties["이름"]?.type === "title"
+        ? properties["이름"].title[0]?.plain_text || ""
+        : "";
+
+    const titleEng =
+      properties["영제"]?.type === "rich_text"
+        ? properties["영제"].rich_text[0]?.plain_text || ""
+        : "";
+
+    const year =
+      properties["연도"]?.type === "number"
+        ? properties["연도"].number?.toString() || ""
+        : "";
+
+    const genre =
+      properties["장르"]?.type === "multi_select"
+        ? properties["장르"].multi_select
+            .map((item: any) => item.name)
+            .join(", ")
+        : "";
+
+    const thumbnail =
+      properties["섬네일"]?.type === "files" &&
+      properties["섬네일"].files[0] &&
+      "file" in properties["섬네일"].files[0]
+        ? convertToPermamentUrl(properties["섬네일"].files[0].file.url, pageId)
+        : "";
+
+    const imageAlt =
+      properties["섬네일 대체 텍스트"]?.type === "rich_text"
+        ? properties["섬네일 대체 텍스트"].rich_text[0]?.plain_text || ""
+        : "";
+
+    return {
+      title,
+      titleEng,
+      year,
+      historyCategory: genre,
+      thumbnail,
+      imageAlt,
+    };
+  } catch (error) {
+    console.error("Error extracting History properties:", error);
+    return {};
+  }
 }
