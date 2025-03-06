@@ -7,8 +7,10 @@ import {
   getWipData,
   notionDatabase,
 } from "@/lib/notion";
+import { Suspense } from "react";
+import Loading from "@/components/Loading";
 
-export default async function Home() {
+async function Feeds() {
   const newWipData = await getWipData();
   const newArticlesData = await getArticlesData();
   const newHistoryData = await getHistoryData();
@@ -18,6 +20,16 @@ export default async function Home() {
       <WorkInProgress data={newWipData} />
       <Articles data={newArticlesData} />
       <History data={newHistoryData} />
+    </>
+  );
+}
+
+export default function Home() {
+  return (
+    <>
+      <Suspense fallback={<Loading />}>
+        <Feeds />
+      </Suspense>
     </>
   );
 }

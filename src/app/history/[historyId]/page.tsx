@@ -1,16 +1,12 @@
 export const runtime = "edge";
 
+import Loading from "@/components/Loading";
 import PostArticle from "@/components/Posts";
 import { getContent } from "@/lib/notion";
 import Image from "next/image";
-import React from "react";
+import React, { Suspense } from "react";
 
-export default async function HistoryPage({
-  params,
-}: {
-  params: { historyId: string };
-}) {
-  const { historyId } = params;
+async function HistoryContent({ historyId }: { historyId: string }) {
   const historyContent = await getContent({
     category: "history",
     id: historyId,
@@ -25,7 +21,7 @@ export default async function HistoryPage({
   }
 
   return (
-    <section>
+    <>
       <Image
         src={historyContent.properties.thumbnail}
         alt={historyContent.properties.imageAlt}
@@ -42,6 +38,22 @@ export default async function HistoryPage({
       <hr className="my-4" />
 
       <PostArticle content={historyContent.htmlContent} />
+    </>
+  );
+}
+
+export default function HistoryPage({
+  params,
+}: {
+  params: { historyId: string };
+}) {
+  const { historyId } = params;
+
+  return (
+    <section className="min-h-full">
+      <Suspense fallback={<Loading />}>
+        <HistoryContent historyId={historyId} />
+      </Suspense>
     </section>
   );
 }

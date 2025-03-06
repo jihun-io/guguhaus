@@ -1,16 +1,12 @@
 export const runtime = "edge";
 
+import Loading from "@/components/Loading";
 import PostArticle from "@/components/Posts";
 import { getContent } from "@/lib/notion";
 import Image from "next/image";
-import React from "react";
+import React, { Suspense } from "react";
 
-export default async function ArticlesPage({
-  params,
-}: {
-  params: { articleId: string };
-}) {
-  const { articleId } = params;
+async function ArticlesContent({ articleId }: { articleId: string }) {
   const articleContent = await getContent({
     category: "articles",
     id: articleId,
@@ -44,6 +40,22 @@ export default async function ArticlesPage({
       <hr className="my-4" />
 
       <PostArticle content={articleContent.htmlContent} />
+    </section>
+  );
+}
+
+export default function ArticlesPage({
+  params,
+}: {
+  params: { articleId: string };
+}) {
+  const { articleId } = params;
+
+  return (
+    <section className="min-h-full">
+      <Suspense fallback={<Loading />}>
+        <ArticlesContent articleId={articleId} />
+      </Suspense>
     </section>
   );
 }

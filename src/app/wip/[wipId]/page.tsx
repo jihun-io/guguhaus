@@ -1,16 +1,13 @@
 export const runtime = "edge";
 
+import Loading from "@/components/Loading";
 import PostArticle from "@/components/Posts";
 import { getContent } from "@/lib/notion";
 import Image from "next/image";
-import React from "react";
+import { Suspense } from "react";
 
-export default async function WipPage({
-  params,
-}: {
-  params: { wipId: string };
-}) {
-  const { wipId } = params;
+// 실제 콘텐츠를 가져오고 렌더링하는 컴포넌트
+async function WipContent({ wipId }: { wipId: string }) {
   const wipContent = await getContent({ category: "wip", id: wipId });
 
   if (!wipContent || !wipContent.htmlContent) {
@@ -22,7 +19,7 @@ export default async function WipPage({
   }
 
   return (
-    <section>
+    <>
       <Image
         src={wipContent.properties.thumbnail}
         alt={wipContent.properties.imageAlt}
@@ -40,6 +37,19 @@ export default async function WipPage({
       <hr className="my-4" />
 
       <PostArticle content={wipContent.htmlContent} />
+    </>
+  );
+}
+
+// 메인 페이지 컴포넌트
+export default function WipPage({ params }: { params: { wipId: string } }) {
+  const { wipId } = params;
+
+  return (
+    <section className="min-h-full">
+      <Suspense fallback={<Loading />}>
+        <WipContent wipId={wipId} />
+      </Suspense>
     </section>
   );
 }
