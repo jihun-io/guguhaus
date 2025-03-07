@@ -20,7 +20,7 @@ async function WipContent({ wipId }: { wipId: string }) {
 
   return (
     <>
-      <Image
+      <img
         src={wipContent.properties.thumbnail}
         alt={wipContent.properties.imageAlt}
         width={480}
