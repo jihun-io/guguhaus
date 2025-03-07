@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { Articles, History, WorkInProgress } from "@/components/Cards";
 import { adminDb } from "./lib/firebaseAdmin";
 import {

@@ -1,4 +1,5 @@
 export const runtime = "edge";
+export const dynamic = "force-dynamic";
 
 import { Participants } from "@/components/Cards";
 import Loading from "@/components/Loading";
