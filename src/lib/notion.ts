@@ -11,6 +11,7 @@ import { unified } from "unified";
 import markdown from "remark-parse";
 import remark2rehype from "remark-rehype";
 import html from "rehype-stringify";
+import { processYouTubeLinks } from "./htmlProcessor";
 
 export const notion = new NotionAPI();
 
@@ -493,13 +494,16 @@ export async function getContent({
       .use(html)
       .process(mdContent);
 
+    // YouTube 링크 처리
+    const ytbProcessedContent = processYouTubeLinks(htmlContent.toString());
+
     return {
       properties: {
         ...categorySpecificProperties,
         createdTime,
         lastEditedTime,
       },
-      htmlContent: htmlContent.toString(),
+      htmlContent: ytbProcessedContent,
     };
   } catch (error) {
     console.error("getContent error:", error);
