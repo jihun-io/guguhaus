@@ -46,7 +46,7 @@ export function WIPCard({ data }: Readonly<CardProps>) {
   return (
     <Link
       href={"wip/" + data.postId}
-      className="flex flex-col w-fit h-fit leading-5"
+      className="flex flex-col w-fill h-fit leading-5"
     >
       <img
         className="aspect-square object-cover w-full my-0"
