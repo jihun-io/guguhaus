@@ -44,3 +44,27 @@ export const processYouTubeLinks = (htmlContent: string): string => {
     return match;
   });
 };
+
+export const generateSrcset = (src: string, widths: number[]): string => {
+  return widths
+    .map((width) => {
+      const srcWithWidth = `${src}&width=${width}`;
+      return `${srcWithWidth} ${width}w`;
+    })
+    .join(", ");
+};
+
+// 이미지 태그의 srcset 속성을 업데이트하는 함수
+export const updateImageSrcset = (htmlContent: string): string => {
+  // img 태그의 src 속성을 찾기 위한 정규식
+  const imgRegex = /<img[^>]*src=["']([^"']+)["'][^>]*>/gi;
+
+  const widths = [640, 1080, 1920];
+
+  // 모든 이미지 태그 처리
+  return htmlContent.replace(imgRegex, (match, src) => {
+    const srcset = generateSrcset(src, widths);
+    // srcset 속성을 추가하여 이미지 태그를 업데이트함
+    return match.replace(">", ` srcset="${srcset}" >`);
+  });
+};
