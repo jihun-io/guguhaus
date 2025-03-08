@@ -48,6 +48,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
+      <head>
+        <meta name="color-scheme" content="dark only" />
+        <meta name="supported-color-schemes" content="dark" />
+        <meta name="theme-color" content="#000000" />
+      </head>
       <body
         className={`px-8 min-h-[100dvh] grid grid-rows-[auto,1fr,auto] prose-p:text-foreground prose-headings:text-foreground overflow-y-scroll
           ${nanumBarunGothic.variable} ${korailCondensed.variable} font-nanum-barun-gothic
