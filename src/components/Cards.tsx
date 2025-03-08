@@ -48,7 +48,7 @@ export function WIPCard({ data }: Readonly<CardProps>) {
       href={"wip/" + data.postId}
       className="flex flex-col w-fill h-fit leading-5"
     >
-      <img
+      <Image
         className="aspect-square object-cover w-full my-0"
         src={data.image}
         alt={data.imageAlt}
@@ -82,7 +82,7 @@ function ArticlesCard({ data }: Readonly<CardProps>) {
       href={"articles/" + data.postId}
       className="relative w-full h-full aspect-square"
     >
-      <img
+      <Image
         src={data.image}
         alt={data.imageAlt}
         width={480}
@@ -118,7 +118,7 @@ export function Articles({ data }: Readonly<{ data: CardProps["data"][] }>) {
 function HistoryCard({ data }: Readonly<CardProps>) {
   return (
     <Link href={"history/" + data.postId} className="w-full h-full">
-      <img
+      <Image
         src={data.image}
         alt={data.imageAlt}
         width={297}
@@ -148,7 +148,7 @@ export function History({ data }: Readonly<{ data: CardProps["data"][] }>) {
 function ParticipantsCard({ data }: Readonly<ParticipantsProps>) {
   return (
     <article>
-      <img
+      <Image
         src={data.image}
         alt={data.imageAlt}
         width={480}

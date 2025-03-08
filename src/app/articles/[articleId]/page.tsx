@@ -23,7 +23,7 @@ async function ArticlesContent({ articleId }: { articleId: string }) {
 
   return (
     <section>
-      <img
+      <Image
         src={articleContent.properties.thumbnail}
         alt={articleContent.properties.imageAlt}
         width={480}

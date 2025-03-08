@@ -23,7 +23,7 @@ async function HistoryContent({ historyId }: { historyId: string }) {
 
   return (
     <>
-      <img
+      <Image
         src={historyContent.properties.thumbnail}
         alt={historyContent.properties.imageAlt}
         width={480}
