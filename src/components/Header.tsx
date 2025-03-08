@@ -39,7 +39,13 @@ export default function Header() {
     <header className="z-50 px-4 py-8 sticky inset-x-0 top-0 bg-background flex justify-between items-center">
       <h1>
         <Link href="/" className="flex w-28">
-          <img className="w-full" src="/images/logo.svg" alt="99haus" />
+          <img
+            className="w-full"
+            src="/images/logo.svg"
+            alt="99haus"
+            width={112}
+            height={40}
+          />
         </Link>
       </h1>
 
