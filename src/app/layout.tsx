@@ -10,27 +10,6 @@ import "../../public/fonts/korail_Condensed/korail_Condensed.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
-// const korailCondensed = localFont({
-//   src: "./fonts/KORAILCondensed-Regular.woff2",
-//   variable: "--font-korail-condensed",
-// });
-
-// const nanumBarunGothic = localFont({
-//   src: [
-//     {
-//       path: "./fonts/NanumBarunGothic.woff",
-//       weight: "400",
-//       style: "normal",
-//     },
-//     {
-//       path: "./fonts/NanumBarunGothicBold.woff",
-//       weight: "700",
-//       style: "normal",
-//     },
-//   ],
-//   variable: "--font-nanum-barun-gothic",
-// });
-
 export const metadata: Metadata = {
   title: "99haus",
   description: "99haus by Jun Park",
