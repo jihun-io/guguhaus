@@ -93,13 +93,6 @@ function ArticlesCard({ data }: Readonly<CardProps>) {
       href={"articles/" + data.postId}
       className="relative w-full h-full aspect-square"
     >
-      <Image
-        src={data.image}
-        alt={data.imageAlt}
-        width={480}
-        height={480}
-        className="w-full h-full object-cover my-0 absolute"
-      />
       <h3 className="my-0 p-4 absolute top-0 right-0 font-outline-1 font-bold text-2xl">
         {data.title}
       </h3>
@@ -111,6 +104,13 @@ function ArticlesCard({ data }: Readonly<CardProps>) {
           {data.desc}
         </p>
       </div>
+      <Image
+        src={data.image}
+        alt={data.imageAlt}
+        width={480}
+        height={480}
+        className="w-full h-full object-cover my-0 absolute -z-10"
+      />
     </Link>
   );
 }
