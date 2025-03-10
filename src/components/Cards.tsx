@@ -48,6 +48,10 @@ function H2({ children }: Readonly<{ children: React.ReactNode }>) {
   return <h2 className="col-span-full w-fit my-0">{children}</h2>;
 }
 
+function ComingSoon() {
+  return <p className="col-span-full my-8">Coming soon...</p>;
+}
+
 export function WIPCard({ data }: Readonly<CardProps>) {
   return (
     <Link
@@ -72,12 +76,13 @@ export function WIPCard({ data }: Readonly<CardProps>) {
 export function WorkInProgress({
   data,
 }: Readonly<{ data: CardProps["data"][] }>) {
+  console.log(data);
   return (
     <Section>
       <H2>WORK IN PROGRESS</H2>
-      {data.map((item) => (
-        <WIPCard key={item.title} data={item} />
-      ))}
+      {data.length === 0 && <ComingSoon />}
+      {data.length > 0 &&
+        data.map((item) => <WIPCard key={item.title} data={item} />)}
     </Section>
   );
 }
@@ -114,9 +119,9 @@ export function Articles({ data }: Readonly<{ data: CardProps["data"][] }>) {
   return (
     <Section>
       <H2>ARTICLES</H2>
-      {data.map((item) => (
-        <ArticlesCard key={item.title} data={item} />
-      ))}
+      {data.length === 0 && <ComingSoon />}
+      {data.length > 0 &&
+        data.map((item) => <ArticlesCard key={item.title} data={item} />)}
     </Section>
   );
 }
@@ -144,9 +149,9 @@ export function History({ data }: Readonly<{ data: CardProps["data"][] }>) {
   return (
     <Section>
       <H2>HISTORY</H2>
-      {data.map((item) => (
-        <HistoryCard key={item.title} data={item} />
-      ))}
+      {data.length === 0 && <ComingSoon />}
+      {data.length > 0 &&
+        data.map((item) => <HistoryCard key={item.title} data={item} />)}
     </Section>
   );
 }
@@ -179,9 +184,11 @@ export function Participants({
 }: Readonly<{ artists: ParticipantsProps["data"][] }>) {
   return (
     <Section>
-      {artists.map((item) => (
-        <ParticipantsCard key={item.artist} data={item} />
-      ))}
+      {artists.length === 0 && <ComingSoon />}
+      {artists.length > 0 &&
+        artists.map((item) => (
+          <ParticipantsCard key={item.artist} data={item} />
+        ))}
     </Section>
   );
 }
