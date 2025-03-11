@@ -5,7 +5,8 @@ export default function EasterEgg() {
   if (isDev) return null;
 
   console.log(`
-Developed by Jihun Kim!
+개발자 도구를 켜셨군요!
+Developed by Jihun Kim
 -----------------------
 - https://dev.jihun.io
 - https://github.com/jihun-io
