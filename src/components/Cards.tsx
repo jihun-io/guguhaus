@@ -91,19 +91,12 @@ function ArticlesCard({ data }: Readonly<CardProps>) {
   return (
     <Link
       href={"articles/" + data.postId}
-      className="relative w-full h-full aspect-square"
+      className="relative w-full h-full aspect-square font-korail-condensed text-2xl"
     >
-      <h3 className="my-0 p-4 absolute top-0 right-0 font-outline-1 font-bold text-2xl">
-        {data.title}
-      </h3>
-      <div className="absolute bottom-0 left-0 p-4">
-        <p className="my-0 text-2xl font-bold font-outline-1">
-          {data.articleCategory}
-        </p>
-        <p className="my-0 font-outline-base font-bold leading-4">
-          {data.desc}
-        </p>
-      </div>
+      <h3 className="sr-only">{data.title}, </h3>
+      <p className="sr-only">
+        {data.articleCategory}. {data.desc}
+      </p>
       <Image
         src={data.image}
         alt={data.imageAlt}
