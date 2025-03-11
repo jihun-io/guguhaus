@@ -9,6 +9,7 @@ import "../../public/fonts/korail_Condensed/korail_Condensed.css";
 
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import EasterEgg from "@/components/EasterEgg";
 
 export const metadata: Metadata = {
   title: "99haus",
@@ -36,6 +37,7 @@ export default function RootLayout({
         <main className="flex flex-col py-16 w-full mx-auto">{children}</main>
         <Footer />
       </body>
+      <EasterEgg />
     </html>
   );
 }
