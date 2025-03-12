@@ -12,6 +12,9 @@ import {
 } from "@/lib/notion";
 import { Suspense } from "react";
 import Loading from "@/components/Loading";
+import generateMetadata from "@/lib/generateMetadata";
+
+export const metadata = generateMetadata({});
 
 async function Feeds() {
   const newWipData = await getWipData();
