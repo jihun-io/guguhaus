@@ -6,6 +6,34 @@ import PostArticle from "@/components/Posts";
 import { getContent } from "@/lib/notion";
 import Image from "next/image";
 import React, { Suspense } from "react";
+import { default as createMetadata } from "@/lib/generateMetadata";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { articleId: string };
+}) {
+  const { articleId } = params;
+
+  const articleContent = await getContent({
+    category: "articles",
+    id: articleId,
+  });
+
+  if (!articleContent || !articleContent.properties) {
+    return createMetadata({
+      title: "99haus",
+      description: "이야기가 시작되는 곳",
+    });
+  }
+
+  return createMetadata({
+    title: `${articleContent.properties.title} - 99haus`,
+    description: articleContent.properties.desc,
+    ogImageUrl: articleContent.properties.thumbnail,
+    currentPage: `articles/${articleId}`,
+  });
+}
 
 async function ArticlesContent({ articleId }: { articleId: string }) {
   const articleContent = await getContent({

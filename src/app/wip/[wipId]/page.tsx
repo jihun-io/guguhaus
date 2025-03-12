@@ -6,6 +6,33 @@ import PostArticle from "@/components/Posts";
 import { getContent } from "@/lib/notion";
 import Image from "next/image";
 import { Suspense } from "react";
+import { default as createMetadata } from "@/lib/generateMetadata";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { wipId: string };
+}) {
+  const { wipId } = params;
+
+  const articleContent = await getContent({
+    category: "wip",
+    id: wipId,
+  });
+
+  if (!articleContent || !articleContent.properties) {
+    return createMetadata({
+      title: "99haus",
+      description: "이야기가 시작되는 곳",
+    });
+  }
+
+  return createMetadata({
+    title: `${articleContent.properties.title} - 99haus`,
+    ogImageUrl: articleContent.properties.thumbnail,
+    currentPage: `wip/${wipId}`,
+  });
+}
 
 // 실제 콘텐츠를 가져오고 렌더링하는 컴포넌트
 async function WipContent({ wipId }: { wipId: string }) {
