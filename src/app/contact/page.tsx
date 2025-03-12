@@ -1,9 +1,11 @@
 import { MainTitle } from "@/components/Title";
+import generateMetadata from "@/lib/generateMetadata";
 
-export const metadata = {
+export const metadata = generateMetadata({
   title: "CONTACT - 99haus",
-  description: "연락 방법",
-};
+  description: "연락",
+  currentPage: "contact",
+});
 
 export default function Contact() {
   return (
