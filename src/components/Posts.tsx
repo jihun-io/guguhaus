@@ -7,6 +7,7 @@ export default function PostArticle({ content }: { content: string }) {
         prose-li:text-foreground prose-li:marker:text-foreground
         prose-a:text-foreground
         prose-img:w-full
+        text-justify
         `}
       dangerouslySetInnerHTML={{ __html: content }}
     />
