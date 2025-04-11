@@ -77,7 +77,6 @@ export function WIPCard({ data }: Readonly<CardProps>) {
 export function WorkInProgress({
   data,
 }: Readonly<{ data: CardProps["data"][] }>) {
-  console.log(data);
   return (
     <Section>
       <H2>WORK IN PROGRESS</H2>
