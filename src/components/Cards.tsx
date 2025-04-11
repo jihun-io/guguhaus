@@ -93,7 +93,6 @@ function ArticlesCard({ data }: Readonly<CardProps>) {
     <Link
       href={"articles/" + data.postId}
       className="relative w-full h-full aspect-square font-korail-condensed text-2xl"
-      aria-label={data.title}
     >
       <h3 className="sr-only">{data.title}, </h3>
       <p className="sr-only">
