@@ -57,6 +57,7 @@ export function WIPCard({ data }: Readonly<CardProps>) {
     <Link
       href={"wip/" + data.postId}
       className="flex flex-col w-fill h-fit leading-5"
+      aria-label={data.title}
     >
       <Image
         className="aspect-square object-cover w-full my-0"
@@ -92,6 +93,7 @@ function ArticlesCard({ data }: Readonly<CardProps>) {
     <Link
       href={"articles/" + data.postId}
       className="relative w-full h-full aspect-square font-korail-condensed text-2xl"
+      aria-label={data.title}
     >
       <h3 className="sr-only">{data.title}, </h3>
       <p className="sr-only">
@@ -121,7 +123,11 @@ export function Articles({ data }: Readonly<{ data: CardProps["data"][] }>) {
 
 function HistoryCard({ data }: Readonly<CardProps>) {
   return (
-    <Link href={"history/" + data.postId} className="w-full h-full">
+    <Link
+      href={"history/" + data.postId}
+      className="w-full h-full"
+      aria-label={data.title}
+    >
       <Image
         src={data.image}
         alt={data.imageAlt}
