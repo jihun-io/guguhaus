@@ -62,8 +62,14 @@ async function ArticlesContent({ articleId }: { articleId: string }) {
       <p>{articleContent.properties.category}</p>
       <p>{articleContent.properties.desc}</p>
       <p>
-        {new Date(articleContent.properties.createdTime).toLocaleString(
-          "ko-KR"
+        {new Date(articleContent.properties.createdTime).toLocaleDateString(
+          "ko-KR",
+          {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            weekday: "long",
+          }
         )}
       </p>
       <hr className="my-4" />

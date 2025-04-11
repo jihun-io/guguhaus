@@ -60,7 +60,15 @@ async function WipContent({ wipId }: { wipId: string }) {
         {wipContent.properties.genre}, {wipContent.properties.year}
       </p>
       <p>
-        {new Date(wipContent.properties.createdTime).toLocaleString("ko-KR")}
+        {new Date(wipContent.properties.createdTime).toLocaleDateString(
+          "ko-KR",
+          {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            weekday: "long",
+          }
+        )}
       </p>
       <hr className="my-4" />
 
