@@ -88,9 +88,9 @@ export default function ArticlesPage({
 
   return (
     <section className="min-h-full">
-      <Suspense fallback={<Loading />}>
-        <ArticlesContent articleId={articleId} />
-      </Suspense>
+      {/* <Suspense fallback={<Loading />}> */}
+      <ArticlesContent articleId={articleId} />
+      {/* </Suspense> */}
     </section>
   );
 }

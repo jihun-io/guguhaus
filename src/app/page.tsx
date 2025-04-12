@@ -33,9 +33,9 @@ async function Feeds() {
 export default function Home() {
   return (
     <>
-      <Suspense fallback={<Loading />}>
-        <Feeds />
-      </Suspense>
+      {/* <Suspense fallback={<Loading />}> */}
+      <Feeds />
+      {/* </Suspense> */}
     </>
   );
 }
