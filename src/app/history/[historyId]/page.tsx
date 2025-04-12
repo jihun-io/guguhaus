@@ -78,10 +78,10 @@ export default function HistoryPage({
   const { historyId } = params;
 
   return (
-    <section className="min-h-full">
-      <Suspense fallback={<Loading />}>
+    <Suspense fallback={<Loading />}>
+      <section className="min-h-full">
         <HistoryContent historyId={historyId} />
-      </Suspense>
-    </section>
+      </section>
+    </Suspense>
   );
 }
