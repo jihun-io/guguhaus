@@ -79,9 +79,7 @@ export default function HistoryPage({
 
   return (
     <section className="min-h-full">
-      <Suspense fallback={<Loading />}>
-        <HistoryContent historyId={historyId} />
-      </Suspense>
+      <HistoryContent historyId={historyId} />
     </section>
   );
 }
