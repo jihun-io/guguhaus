@@ -82,10 +82,8 @@ export default function WipPage({ params }: { params: { wipId: string } }) {
   const { wipId } = params;
 
   return (
-    <Suspense fallback={<Loading />}>
-      <section className="min-h-full">
-        <WipContent wipId={wipId} />
-      </section>
-    </Suspense>
+    <section className="min-h-full">
+      <WipContent wipId={wipId} />
+    </section>
   );
 }

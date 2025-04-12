@@ -87,10 +87,8 @@ export default function ArticlesPage({
   const { articleId } = params;
 
   return (
-    <Suspense fallback={<Loading />}>
-      <section className="min-h-full">
-        <ArticlesContent articleId={articleId} />
-      </section>
-    </Suspense>
+    <section className="min-h-full">
+      <ArticlesContent articleId={articleId} />
+    </section>
   );
 }
