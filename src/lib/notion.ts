@@ -486,13 +486,21 @@ export async function getContent({
       return block;
     });
 
+    const escapeHtmlLike = (content: string): string => {
+      // 모든 < 와 > 문자를 HTML 엔티티로 변환
+      return content.replaceAll(/</g, "&lt;").replaceAll(/>/g, "&gt;");
+    };
+
     const mdContent = n2m.toMarkdownString(convertedMdBlocks).parent;
+    const escapedMdContent = escapeHtmlLike(mdContent);
 
     const htmlContent = await unified()
       .use(markdown)
       .use(remark2rehype)
       .use(html)
-      .process(mdContent);
+      .process(escapedMdContent);
+
+    console.log("htmlContent", htmlContent);
 
     // YouTube 링크 처리
     const ytbProcessedContent = processYouTubeLinks(htmlContent.toString());
