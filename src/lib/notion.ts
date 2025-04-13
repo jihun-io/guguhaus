@@ -324,7 +324,7 @@ export async function getContent({
   category,
   id,
 }: {
-  category: "wip" | "articles" | "history";
+  category: "wip" | "articles" | "history" | "limited";
   id: string;
 }) {
   // id는 페이지의 영문 경로
@@ -342,6 +342,11 @@ export async function getContent({
       case "history":
         dbId = process.env.NOTION_HISTORY_ID;
         break;
+      case "limited":
+        dbId = process.env.NOTION_LIMITED_ID;
+        break;
+      default:
+        throw new Error("Invalid category");
     }
 
     if (!dbId) {
@@ -419,6 +424,14 @@ export async function getContent({
           pageId
         );
         break;
+      case "limited":
+        categorySpecificProperties = extractLimitedProperties(
+          properties,
+          pageId
+        );
+        break;
+      default:
+        throw new Error("Invalid category");
     }
 
     const mdBlocks = await n2m.pageToMarkdown(pageId);
@@ -499,8 +512,6 @@ export async function getContent({
       .use(remark2rehype)
       .use(html)
       .process(escapedMdContent);
-
-    console.log("htmlContent", htmlContent);
 
     // YouTube 링크 처리
     const ytbProcessedContent = processYouTubeLinks(htmlContent.toString());
@@ -653,6 +664,37 @@ function extractHistoryProperties(properties: any, pageId: string) {
     };
   } catch (error) {
     console.error("Error extracting History properties:", error);
+    return {};
+  }
+}
+
+function extractLimitedProperties(properties: any, pageId: string) {
+  try {
+    const title =
+      properties["이름"]?.type === "title"
+        ? properties["이름"].title[0]?.plain_text || ""
+        : "";
+    const titleEng =
+      properties["영제"]?.type === "rich_text"
+        ? properties["영제"].rich_text[0]?.plain_text || ""
+        : "";
+    const year =
+      properties["연도"]?.type === "number"
+        ? properties["연도"].number?.toString() || ""
+        : "";
+    const limitedCategory =
+      properties["카테고리"]?.type === "select"
+        ? properties["카테고리"].select?.name || ""
+        : "";
+
+    return {
+      title,
+      titleEng,
+      year,
+      limitedCategory,
+    };
+  } catch (error) {
+    console.error("Error extracting Limited properties:", error);
     return {};
   }
 }

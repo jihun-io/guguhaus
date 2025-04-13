@@ -13,7 +13,7 @@ export const getYouTubeVideoId = (url: string): string | null => {
 export const processYouTubeLinks = (htmlContent: string): string => {
   // DOMParser를 사용할 수 없으므로 정규식으로 처리
   // <a href="..." 패턴 찾기
-  const linkRegex = /<a[^>]*href=["']([^"']+)["'][^>]*>(.*?)<\/a>/gi;
+  const linkRegex = /<p><a[^>]*href=["']([^"']+)["'][^>]*>(.*?)<\/a><\/p>/gi;
 
   // 모든 링크 태그 처리
   return htmlContent.replace(linkRegex, (match, href, text) => {
@@ -24,18 +24,18 @@ export const processYouTubeLinks = (htmlContent: string): string => {
       if (videoId) {
         // YouTube 임베드로 교체
         return `
-          <div class="youtube-embed my-4">
-            <iframe
-              width="560"
-              height="315"
-              src="https://www.youtube.com/embed/${videoId}"
-              title="${text || "YouTube video"}"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
-              class="w-full aspect-video"
-            ></iframe>
-          </div>
+<div class="youtube-embed my-4">
+<iframe
+width="560"
+height="315"
+src="https://www.youtube.com/embed/${videoId}"
+title="${text || "YouTube video"}"
+frameborder="0"
+allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+allowfullscreen
+class="w-full aspect-video"
+></iframe>
+</div>
         `;
       }
     }
