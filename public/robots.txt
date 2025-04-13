@@ -1,0 +1,12 @@
+User-agent: *
+
+# Allow
+Allow: /
+Allow: /articles/
+Allow: /contact
+Allow: /history/
+Allow: /participants
+Allow: /wip/
+
+# Disallow private or system paths
+Disallow: /limited/
