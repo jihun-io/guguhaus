@@ -500,8 +500,6 @@ export async function getContent({
       .use(html)
       .process(escapedMdContent);
 
-    console.log("htmlContent", htmlContent);
-
     // YouTube 링크 처리
     const ytbProcessedContent = processYouTubeLinks(htmlContent.toString());
     const srcProcessedContent = updateImageSrcset(ytbProcessedContent);
