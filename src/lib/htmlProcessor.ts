@@ -29,6 +29,7 @@ export const processYouTubeLinks = (htmlContent: string): string => {
 width="560"
 height="315"
 src="https://www.youtube.com/embed/${videoId}"
+style="aspect-ratio: 16/9; width: 100%; height: 100%;"
 title="${text || "YouTube video"}"
 frameborder="0"
 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -41,6 +42,40 @@ class="w-full aspect-video"
     }
 
     // YouTube 링크가 아니면 원래 링크 반환
+    return match;
+  });
+};
+
+export const processVimeoLinks = (htmlContent: string): string => {
+  // <a href="..." 패턴 찾기
+  const linkRegex = /<p><a[^>]*href=["']([^"']+)["'][^>]*>(.*?)<\/a><\/p>/gi;
+
+  // 모든 링크 태그 처리
+  return htmlContent.replace(linkRegex, (match, href, text) => {
+    // Vimeo 링크인지 확인
+    if (href.includes("vimeo.com")) {
+      const videoId = href.split("/").pop();
+
+      if (videoId) {
+        // Vimeo 임베드로 교체
+        return `
+<div class="vimeo-embed my-4">
+<iframe
+width="560"
+height="315"
+src="https://player.vimeo.com/video/${videoId}"
+style="aspect-ratio: 16/9; width: 100%; height: 100%;"
+title="${text || "Vimeo video"}"
+frameborder="0"
+allow="autoplay; fullscreen; picture-in-picture"
+allowfullscreen
+class="w-full aspect-video bg-background"
+></iframe>
+</div>
+        `;
+      }
+    }
+    // Vimeo 링크가 아니면 원래 링크 반환
     return match;
   });
 };

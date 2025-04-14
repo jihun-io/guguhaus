@@ -11,7 +11,11 @@ import { unified } from "unified";
 import markdown from "remark-parse";
 import remark2rehype from "remark-rehype";
 import html from "rehype-stringify";
-import { processYouTubeLinks, updateImageSrcset } from "./htmlProcessor";
+import {
+  processVimeoLinks,
+  processYouTubeLinks,
+  updateImageSrcset,
+} from "./htmlProcessor";
 
 export const notion = new NotionAPI();
 
@@ -514,7 +518,8 @@ export async function getContent({
       .process(escapedMdContent);
 
     // YouTube 링크 처리
-    const ytbProcessedContent = processYouTubeLinks(htmlContent.toString());
+    const vimeoProcessedContent = processVimeoLinks(htmlContent.toString());
+    const ytbProcessedContent = processYouTubeLinks(vimeoProcessedContent);
     const srcProcessedContent = updateImageSrcset(ytbProcessedContent);
 
     return {
