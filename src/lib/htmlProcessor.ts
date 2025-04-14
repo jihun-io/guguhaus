@@ -29,6 +29,7 @@ export const processYouTubeLinks = (htmlContent: string): string => {
 width="560"
 height="315"
 src="https://www.youtube.com/embed/${videoId}"
+style="aspect-ratio: 16/9; width: 100%; height: 100%;"
 title="${text || "YouTube video"}"
 frameborder="0"
 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
