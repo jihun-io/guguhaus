@@ -73,7 +73,6 @@ export default function Header() {
               : "opacity-0 -translate-y-full pointer-events-none sm:opacity-100 sm:translate-y-0 sm:pointer-events-auto"
           }
         `}
-        role="menu"
       >
         <ul
           className={`
@@ -82,11 +81,7 @@ export default function Header() {
         `}
         >
           {menuItems.map((item) => (
-            <li
-              key={item.href}
-              role="menuitem"
-              className="font-korail-condensed"
-            >
+            <li key={item.href} className="font-korail-condensed">
               <Link
                 href={item.href}
                 onClick={() => setIsMenuOpen(false)}
