@@ -464,10 +464,13 @@ export async function getContent({
           block.blockId
         );
 
+        const encodedImageLink = encodeURIComponent(convertedImageLink);
+        const imageLoaderUrl = `/api/img/${encodedImageLink}`;
+
         return {
           type: "image",
           blockId: block.blockId,
-          parent: `![${altText}](${convertedImageLink})`,
+          parent: `![${altText}](${imageLoaderUrl})`,
           children: [],
         };
       }
