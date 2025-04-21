@@ -83,7 +83,7 @@ class="w-full aspect-video bg-background"
 export const generateSrcset = (src: string, widths: number[]): string => {
   return widths
     .map((width) => {
-      const srcWithWidth = `${src}&width=${width}`;
+      const srcWithWidth = `${src}?width=${width}`;
       return `${srcWithWidth} ${width}w`;
     })
     .join(", ");
@@ -94,7 +94,7 @@ export const updateImageSrcset = (htmlContent: string): string => {
   // img 태그의 src 속성을 찾기 위한 정규식
   const imgRegex = /<img[^>]*src=["']([^"']+)["'][^>]*>/gi;
 
-  const widths = [640, 1080, 1920];
+  const widths = [320, 640, 1080, 1920];
 
   // 모든 이미지 태그 처리
   return htmlContent.replace(imgRegex, (match, src) => {

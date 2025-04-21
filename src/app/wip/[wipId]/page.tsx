@@ -53,6 +53,7 @@ async function WipContent({ wipId }: { wipId: string }) {
         alt={wipContent.properties.imageAlt}
         width={480}
         height={480}
+        sizes="(max-width: 480px) 100vw, 480px"
         className="aspect-square object-cover w-full max-w-[480px] my-2"
       />
       <h2 className="text-2xl">{wipContent.properties.title}</h2>
