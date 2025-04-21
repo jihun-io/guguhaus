@@ -55,6 +55,7 @@ async function HistoryContent({ historyId }: { historyId: string }) {
         alt={historyContent.properties.imageAlt}
         width={480}
         height={480}
+        sizes="(max-width: 480px) 100vw, 480px"
         className="aspect-[210/297] object-cover w-full max-w-[480px] my-2"
       />
       <h2 className="text-2xl">{historyContent.properties.title}</h2>

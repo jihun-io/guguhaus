@@ -63,6 +63,7 @@ export function WIPCard({ data }: Readonly<CardProps>) {
         className="aspect-square object-cover w-full my-0"
         src={data.image}
         alt={data.imageAlt}
+        sizes="(max-width: 480px) 100vw, 480px"
         width={480}
         height={480}
       />
@@ -102,6 +103,7 @@ function ArticlesCard({ data }: Readonly<CardProps>) {
         alt={data.imageAlt}
         width={480}
         height={480}
+        sizes="(max-width: 480px) 100vw, 480px"
         className="w-full h-full object-cover my-0 absolute -z-10"
       />
     </Link>
@@ -131,6 +133,7 @@ function HistoryCard({ data }: Readonly<CardProps>) {
         alt={data.imageAlt}
         width={297}
         height={210}
+        sizes="(max-width: 480px) 100vw, 480px"
         className="w-full object-cover  aspect-[210/297] my-0"
       />
       <h3 className="mt-2 mb-0 leading-6">{data.title}</h3>
@@ -161,6 +164,7 @@ function ParticipantsCard({ data }: Readonly<ParticipantsProps>) {
         alt={data.imageAlt}
         width={480}
         height={480}
+        sizes="(max-width: 480px) 100vw, 480px"
         className="w-full aspect-square object-cover"
       />
       <h3 className="my-0 leading-6">{data.artist}</h3>

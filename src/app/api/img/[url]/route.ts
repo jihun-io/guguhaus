@@ -1,15 +1,16 @@
 export const runtime = "edge";
 
 import { NextRequest, NextResponse } from "next/server";
+// import { createUrl } from 'next/dist/shared/lib/router/utils/create-url';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { url: string } }
+  { params }: { params: { url: string } },
 ) {
   const { url } = params;
-
   const imageUrl = url;
 
+  // URL 검증
   if (!imageUrl) {
     return new NextResponse("Image URL is required", { status: 400 });
   }
@@ -19,13 +20,28 @@ export async function GET(
     return new NextResponse("NOTION_URL is not defined", { status: 500 });
   }
 
-  // URL 검증
   if (!imageUrl.includes(NOTION_URL)) {
     return new NextResponse("Invalid image URL", { status: 400 });
   }
 
   try {
-    const response = await fetch(imageUrl);
+    // 쿼리 파라미터 추출
+    const searchParams = request.nextUrl.searchParams;
+    const width = searchParams.get("width");
+
+    // 원본 URL 디코딩
+    let fetchUrl = decodeURI(imageUrl);
+
+    // width 파라미터가 있으면 Notion 이미지 URL에 추가
+    if (width) {
+      // URL 객체 생성
+      const origUrl = new URL(fetchUrl);
+      // 기존 파라미터 유지하면서 width 파라미터 추가
+      origUrl.searchParams.set("width", width);
+      fetchUrl = origUrl.toString();
+    }
+
+    const response = await fetch(fetchUrl);
 
     if (!response.ok) {
       return new NextResponse(`Failed to fetch image: ${response.statusText}`, {
@@ -36,10 +52,9 @@ export async function GET(
     const imageData = await response.arrayBuffer();
     const contentType = response.headers.get("content-type") || "image/jpeg";
 
-    // 응답 헤더 설정
     const headers = new Headers();
     headers.set("Content-Type", contentType);
-    headers.set("Cache-Control", "public, max-age=86400"); // 24시간 캐싱
+    headers.set("Cache-Control", "public, max-age=86400");
 
     return new NextResponse(imageData, {
       status: 200,

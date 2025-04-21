@@ -8,5 +8,5 @@ export default function imageLoader({
   quality?: number;
 }) {
   const encodedSrc = encodeURIComponent(src);
-  return `/api/img/${encodedSrc}&width=${width}`;
+  return `/api/img/${encodedSrc}?width=${width}`;
 }
