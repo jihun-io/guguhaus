@@ -1,7 +1,6 @@
 export const runtime = "edge";
 
 import { NextRequest, NextResponse } from "next/server";
-// import { createUrl } from 'next/dist/shared/lib/router/utils/create-url';
 
 export async function GET(
   request: NextRequest,
