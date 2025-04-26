@@ -33,6 +33,12 @@ export const n2m = new NotionToMarkdown({
 
 const ENVIRONMENT = process.env.APP_ENVIRONMENT || "dev";
 
+const NOTION_URL = process.env.NOTION_URL as string;
+
+if (!NOTION_URL) {
+  throw new Error("NOTION_URL is not defined");
+}
+
 // WIP 데이터 인터페이스 정의
 export interface WipItem {
   id: string;
@@ -469,7 +475,9 @@ export async function getContent({
           block.blockId,
         );
 
-        const encodedImageLink = encodeURIComponent(convertedImageLink);
+        const filteredImageLink = convertedImageLink.replace(NOTION_URL, "");
+
+        const encodedImageLink = encodeURIComponent(filteredImageLink);
         const imageLoaderUrl = `/api/img/${encodedImageLink}`;
 
         return {

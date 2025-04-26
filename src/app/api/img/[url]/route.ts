@@ -6,21 +6,17 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { url: string } },
 ) {
-  const { url } = params;
-  const imageUrl = url;
-
-  // URL 검증
-  if (!imageUrl) {
-    return new NextResponse("Image URL is required", { status: 400 });
-  }
-
   const NOTION_URL = process.env.NOTION_URL;
   if (!NOTION_URL) {
     return new NextResponse("NOTION_URL is not defined", { status: 500 });
   }
 
-  if (!imageUrl.includes(NOTION_URL)) {
-    return new NextResponse("Invalid image URL", { status: 400 });
+  const { url } = params;
+  const imageUrl = NOTION_URL + url;
+
+  // URL 검증
+  if (!imageUrl) {
+    return new NextResponse("Image URL is required", { status: 400 });
   }
 
   try {
