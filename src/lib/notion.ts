@@ -31,6 +31,8 @@ export const n2m = new NotionToMarkdown({
   notionClient: notionDatabase,
 });
 
+const ENVIRONMENT = process.env.APP_ENVIRONMENT || "dev";
+
 // WIP 데이터 인터페이스 정의
 export interface WipItem {
   id: string;
@@ -83,7 +85,7 @@ export async function getWipData(): Promise<WipItem[]> {
         throw new Error(`필수 속성이 누락되었습니다: ${page.id}`);
       }
 
-      if (!isShow.checkbox) {
+      if (ENVIRONMENT === "production" && !isShow.checkbox) {
         return null;
       }
 
@@ -154,7 +156,7 @@ export async function getArticlesData(): Promise<ArticleItem[]> {
         throw new Error(`필수 속성이 누락되었습니다: ${page.id}`);
       }
 
-      if (!isShow.checkbox) {
+      if (ENVIRONMENT === "production" && !isShow.checkbox) {
         return null;
       }
 
@@ -226,7 +228,7 @@ export async function getHistoryData(): Promise<HistoryItem[]> {
         throw new Error(`필수 속성이 누락되었습니다: ${page.id}`);
       }
 
-      if (!isShow.checkbox) {
+      if (ENVIRONMENT === "production" && !isShow.checkbox) {
         return null;
       }
 
@@ -292,7 +294,7 @@ export async function getParticipantsData(): Promise<ParticipantsItem[]> {
         throw new Error(`필수 속성이 누락되었습니다: ${page.id}`);
       }
 
-      if (!isShow.checkbox) {
+      if (ENVIRONMENT === "production" && !isShow.checkbox) {
         return null;
       }
 
@@ -315,7 +317,7 @@ function isPageObjectResponse(obj: any): obj is PageObjectResponse {
 
 // 체크박스 속성인지 확인하는 타입 가드 함수
 function isCheckboxProperty(
-  property: any
+  property: any,
 ): property is { type: "checkbox"; checkbox: boolean; id: string } {
   return (
     property &&
@@ -399,7 +401,10 @@ export async function getContent({
     }
 
     const deployProperty = properties["배포"];
-    if (!isCheckboxProperty(deployProperty) || !deployProperty.checkbox) {
+    if (
+      !isCheckboxProperty(deployProperty) ||
+      (!deployProperty.checkbox && ENVIRONMENT === "production")
+    ) {
       throw new Error("Page is not published");
     }
 
@@ -419,19 +424,19 @@ export async function getContent({
       case "articles":
         categorySpecificProperties = extractArticleProperties(
           properties,
-          pageId
+          pageId,
         );
         break;
       case "history":
         categorySpecificProperties = extractHistoryProperties(
           properties,
-          pageId
+          pageId,
         );
         break;
       case "limited":
         categorySpecificProperties = extractLimitedProperties(
           properties,
-          pageId
+          pageId,
         );
         break;
       default:
@@ -461,7 +466,7 @@ export async function getContent({
         const altText = altTextMatch[1];
         const convertedImageLink = convertToPermamentUrl(
           imageLink,
-          block.blockId
+          block.blockId,
         );
 
         const encodedImageLink = encodeURIComponent(convertedImageLink);
