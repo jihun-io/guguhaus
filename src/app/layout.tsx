@@ -21,6 +21,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const APP_ENV = process.env.APP_ENVIRONMENT || "production";
+
   return (
     <html lang="ko">
       <head>
@@ -33,6 +35,11 @@ export default function RootLayout({
           font-nanum-barun-gothic
           `}
       >
+        {APP_ENV === "dev" && (
+          <div className="w-full h-[2rem] flex justify-center items-center fixed z-[100] left-0 top-0 bg-red-800">
+            <p className="text-center text-white">개발 환경입니다.</p>
+          </div>
+        )}
         <Header />
         <main className="flex flex-col py-16 w-full mx-auto overflow-hidden">
           {children}
