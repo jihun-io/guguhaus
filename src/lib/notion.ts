@@ -332,6 +332,74 @@ function isCheckboxProperty(
   );
 }
 
+export interface BannerItem {
+  id: string;
+  title: string;
+  image: string;
+  imageAlt: string;
+  url: string;
+  order: number;
+}
+
+export async function getBannerData(): Promise<BannerItem[]> {
+  const bannerId = process.env.NOTION_BANNER_ID;
+
+  if (!bannerId) {
+    throw new Error("BANNER_ID is not defined");
+  }
+
+  const bannerDb = await notionDatabase.databases.query({
+    database_id: bannerId,
+  });
+
+  return bannerDb.results
+    .filter((item): item is PageObjectResponse => "properties" in item)
+    .map((page) => {
+      const title = page.properties["이름"];
+      const bannerImage = page.properties["배너 이미지"];
+      const imageAlt = page.properties["대체 텍스트"];
+      const isShow = page.properties["배포"];
+      const url = page.properties["링크"];
+      const order = page.properties["표시 순서"];
+
+      if (
+        title?.type !== "title" ||
+        !title.title[0]?.plain_text ||
+        bannerImage?.type !== "files" ||
+        !bannerImage.files[0] ||
+        !("file" in bannerImage.files[0]) ||
+        imageAlt?.type !== "rich_text" ||
+        !imageAlt.rich_text[0]?.plain_text ||
+        isShow?.type !== "checkbox" ||
+        url?.type !== "url" ||
+        !url.url ||
+        order?.type !== "select" ||
+        !order.select?.name
+      ) {
+        throw new Error(`필수 속성이 누락되었습니다: ${page.id}`);
+      }
+
+      if (ENVIRONMENT === "production" && !isShow.checkbox) {
+        return null;
+      }
+
+      return {
+        id: page.id,
+        title: title.title[0].plain_text,
+        image: convertToPermamentUrl(bannerImage.files[0].file.url, page.id),
+        imageAlt: imageAlt.rich_text[0].plain_text,
+        url: url.url,
+        order: parseInt(order.select.name),
+      };
+    })
+    .filter((item): item is BannerItem => item !== null)
+    .sort((a, b) => {
+      const orderA = a.order;
+      const orderB = b.order;
+      return orderA - orderB;
+    });
+}
+
 export async function getContent({
   category,
   id,

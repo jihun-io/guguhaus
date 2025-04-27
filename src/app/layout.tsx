@@ -34,7 +34,9 @@ export default function RootLayout({
           `}
       >
         <Header />
-        <main className="flex flex-col py-16 w-full mx-auto">{children}</main>
+        <main className="flex flex-col py-16 w-full mx-auto overflow-hidden">
+          {children}
+        </main>
         <Footer />
       </body>
       <EasterEgg />

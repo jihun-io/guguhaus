@@ -48,6 +48,9 @@ export default function Header() {
           />
         </Link>
       </h1>
+      {process.env.APP_ENVIRONMENT !== "production" && (
+        <span className="font-korail-condensed">PREVIEW</span>
+      )}
 
       <button
         onClick={toggleMenu}
