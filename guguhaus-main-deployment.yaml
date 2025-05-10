@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: guguhaus-main # Jenkinsfile의 KUBERNETES_DEPLOYMENT_NAME과 일치
+  namespace: guguhaus    # Jenkinsfile의 KUBERNETES_NAMESPACE와 일치
+  labels:
+    app: guguhaus-main-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: guguhaus-main-app
+  template:
+    metadata:
+      labels:
+        app: guguhaus-main-app
+    spec:
+      containers:
+        - name: guguhaus-main # kubectl set image의 대상 컨테이너 이름 (KUBERNETES_DEPLOYMENT_NAME과 동일하게 가정)
+          image: kimjihunio/guguhaus-main:initial # 젠킨스가 첫 빌드 후 생성/업데이트할 이미지의 초기 태그
+          ports:
+            - containerPort: 3000
