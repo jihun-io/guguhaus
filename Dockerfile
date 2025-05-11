@@ -38,4 +38,12 @@ COPY --from=builder /app/node_modules ./node_modules
 # .env.production 파일은 빌드 시에만 사용되었으므로, 최종 프로덕션 이미지에는 포함시키지 않습니다.
 # 빌드된 코드(.next 폴더 내)에 이미 환경 변수 값들이 반영되어 있습니다 (특히 NEXT_PUBLIC_* 변수들).
 # 만약 서버 사이드에서만 사용하고 빌드 시점에 확정되지 않아도 되는 환경변수가 있다면,
-# 이 Dockerfile의 ENV 명령어나, Kubernetes Deployment의 env 설정을 통해 주
+# 이 Dockerfile의 ENV 명령어나, Kubernetes Deployment의 env 설정을 통해 주입할 수 있습니다.
+# 예: ENV MY_SERVER_ONLY_VARIABLE="value_from_dockerfile_or_k8s"
+
+# Next.js 애플리케이션이 실행될 포트 (기본값 3000)
+EXPOSE 3000
+
+# 애플리케이션 실행 명령어
+# npm start는 package.json의 "scripts": { "start": "next start" }를 실행합니다.
+CMD ["npm", "start"]
