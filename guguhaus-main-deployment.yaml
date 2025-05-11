@@ -20,3 +20,6 @@ spec:
           image: kimjihunio/guguhaus-main:initial # 젠킨스가 첫 빌드 후 생성/업데이트할 이미지의 초기 태그
           ports:
             - containerPort: 3000
+          envFrom:
+            - secretRef:
+                name: guguhaus-server-secrets
