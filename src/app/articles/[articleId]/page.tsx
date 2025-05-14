@@ -3,8 +3,7 @@ export const dynamic = "force-dynamic";
 
 import Loading from "@/components/Loading";
 import PostArticle from "@/components/Posts";
-import { getContent } from "@/lib/notion";
-import Image from "next/image";
+import { getContent } from "@/lib/supabase";
 import React, { Suspense } from "react";
 import { default as createMetadata } from "@/lib/generateMetadata";
 
@@ -51,7 +50,7 @@ async function ArticlesContent({ articleId }: { articleId: string }) {
 
   return (
     <section>
-      <Image
+      <img
         src={articleContent.properties.thumbnail}
         alt={articleContent.properties.imageAlt}
         width={480}
@@ -70,7 +69,7 @@ async function ArticlesContent({ articleId }: { articleId: string }) {
             month: "long",
             day: "numeric",
             weekday: "long",
-          }
+          },
         )}
       </p>
       <hr className="my-4" />

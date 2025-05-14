@@ -1,11 +1,8 @@
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
 
-import Loading from "@/components/Loading";
 import PostArticle from "@/components/Posts";
-import { getContent } from "@/lib/notion";
-import Image from "next/image";
-import { Suspense } from "react";
+import { getContent } from "@/lib/supabase";
 import { default as createMetadata } from "@/lib/generateMetadata";
 
 export async function generateMetadata({
@@ -48,7 +45,7 @@ async function WipContent({ wipId }: { wipId: string }) {
 
   return (
     <>
-      <Image
+      <img
         src={wipContent.properties.thumbnail}
         alt={wipContent.properties.imageAlt}
         width={480}
@@ -68,7 +65,7 @@ async function WipContent({ wipId }: { wipId: string }) {
             month: "long",
             day: "numeric",
             weekday: "long",
-          }
+          },
         )}
       </p>
       <hr className="my-4" />

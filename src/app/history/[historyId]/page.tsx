@@ -3,7 +3,7 @@ export const dynamic = "force-dynamic";
 
 import Loading from "@/components/Loading";
 import PostArticle from "@/components/Posts";
-import { getContent } from "@/lib/notion";
+import { getContent } from "@/lib/supabase";
 import Image from "next/image";
 import React, { Suspense } from "react";
 import { default as createMetadata } from "@/lib/generateMetadata";
@@ -50,7 +50,7 @@ async function HistoryContent({ historyId }: { historyId: string }) {
 
   return (
     <>
-      <Image
+      <img
         src={historyContent.properties.thumbnail}
         alt={historyContent.properties.imageAlt}
         width={480}
