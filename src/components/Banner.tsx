@@ -4,7 +4,6 @@
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
-import Image from "next/image";
 import Link from "next/link";
 import type { BannerItem } from "@/lib/notion"; // notion.ts에서 정의된 타입을 가져옵니다.
 
@@ -51,14 +50,13 @@ export function Banner({ data }: Readonly<BannerProps>) {
           <SwiperSlide key={item.id}>
             <h3 className="sr-only">{item.title}</h3>{" "}
             <Link href={item.url} target="_blank" rel="noopener noreferrer">
-              <Image
+              <img
                 src={item.image}
                 alt={item.imageAlt}
                 width={1920} // 원본 이미지 너비 또는 최대 너비
                 height={1080} // 원본 이미지 높이 또는 최대 높이
                 sizes="100vw" // 뷰포트 너비에 따라 이미지 크기 조절
                 className="w-full h-auto object-cover aspect-video" // 이미지 스타일
-                priority={index === 0} // 첫 번째 이미지는 우선 로드
               />
             </Link>
           </SwiperSlide>

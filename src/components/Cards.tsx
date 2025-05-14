@@ -59,7 +59,7 @@ export function WIPCard({ data }: Readonly<CardProps>) {
       className="flex flex-col w-fill h-fit leading-5"
       aria-label={data.title}
     >
-      <Image
+      <img
         className="aspect-square object-cover w-full my-0"
         src={data.image}
         alt={data.imageAlt}
@@ -98,7 +98,7 @@ function ArticlesCard({ data }: Readonly<CardProps>) {
       <p className="sr-only">
         {data.articleCategory}. {data.desc}
       </p>
-      <Image
+      <img
         src={data.image}
         alt={data.imageAlt}
         width={480}
@@ -128,7 +128,7 @@ function HistoryCard({ data }: Readonly<CardProps>) {
       className="w-full h-full"
       aria-label={data.title}
     >
-      <Image
+      <img
         src={data.image}
         alt={data.imageAlt}
         width={297}
@@ -159,7 +159,7 @@ export function History({ data }: Readonly<{ data: CardProps["data"][] }>) {
 function ParticipantsCard({ data }: Readonly<ParticipantsProps>) {
   return (
     <article>
-      <Image
+      <img
         src={data.image}
         alt={data.imageAlt}
         width={480}
