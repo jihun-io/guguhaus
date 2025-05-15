@@ -1,9 +1,8 @@
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
 
-import PostArticle, { PostLimitedArticle } from "@/components/Posts";
-import { getContent } from "@/lib/notion";
-import Image from "next/image";
+import { PostLimitedArticle } from "@/components/Posts";
+import { getContent } from "@/lib/supabase";
 import React from "react";
 import { default as createMetadata } from "@/lib/generateMetadata";
 
