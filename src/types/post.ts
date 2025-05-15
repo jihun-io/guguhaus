@@ -93,6 +93,7 @@ export interface PostTypes {
     genre?: string;
     articleCategory?: string;
     historyCategory?: string;
+    limitedCategory?: string;
     desc?: string;
     titleEng?: string;
     isDeleted?: boolean;
