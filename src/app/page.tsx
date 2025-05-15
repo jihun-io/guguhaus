@@ -2,12 +2,9 @@ export const runtime = "edge";
 export const dynamic = "force-dynamic";
 
 import { Articles, History, WorkInProgress } from "@/components/Cards";
-import { Banner } from "@/components/Banner";
-import { getBannerData, getData, notionDatabase } from "@/lib/notion";
 
 import { getWipData, getArticlesData, getHistoryData } from "@/lib/supabase";
 
-import { Suspense } from "react";
 import generateMetadata from "@/lib/generateMetadata";
 
 export const metadata = generateMetadata({});
