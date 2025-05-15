@@ -25,7 +25,8 @@ export async function getWipData() {
     const { data, error } = await supabaseClient
       .from("wip")
       .select("*")
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: false })
+      .filter("isshow", "eq", !!(process.env.APP_ENVIRONMENT === "production"));
 
     if (error) {
       throw new Error(error.message);
@@ -54,7 +55,8 @@ export async function getArticlesData() {
     const { data, error } = await supabaseClient
       .from("articles")
       .select("*")
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: false })
+      .filter("isshow", "eq", !!(process.env.APP_ENVIRONMENT === "production"));
 
     if (error) {
       throw new Error(error.message);
@@ -83,7 +85,8 @@ export async function getHistoryData() {
     const { data, error } = await supabaseClient
       .from("history")
       .select("*")
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: false })
+      .filter("isshow", "eq", !!(process.env.APP_ENVIRONMENT === "production"));
 
     if (error) {
       throw new Error(error.message);
@@ -120,6 +123,7 @@ export async function getContent({
       .from(category)
       .select("*")
       .eq("postid", id)
+      .eq("isshow", !!(process.env.APP_ENVIRONMENT === "production"))
       .single();
 
     if (error) {
