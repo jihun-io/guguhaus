@@ -104,14 +104,14 @@ export interface PostTypes {
 
 export interface PostDb {
   id?: string;
-  title: string;
-  postid: string;
+  title?: string;
+  postid?: string;
   created_at?: string;
-  htmlcontent: string;
-  updatedat: string;
+  htmlcontent?: string;
+  updatedat?: string;
   thumbnail?: string;
   imageurl?: string;
-  imagealt: string;
+  imagealt?: string;
   date?: string;
   year?: string;
   genre?: string;
