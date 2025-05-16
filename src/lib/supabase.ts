@@ -22,11 +22,16 @@ export const supabase = () => {
 export async function getWipData() {
   const supabaseClient = supabase();
   try {
-    const { data, error } = await supabaseClient
+    const query = supabaseClient
       .from("wip")
       .select("*")
-      .order("created_at", { ascending: false })
-      .filter("isshow", "eq", !!(process.env.APP_ENVIRONMENT === "production"));
+      .order("created_at", { ascending: false });
+
+    if (process.env.APP_ENVIRONMENT === "production") {
+      query.filter("isshow", "eq", true);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
       throw new Error(error.message);
@@ -52,11 +57,16 @@ export async function getWipData() {
 export async function getArticlesData() {
   const supabaseClient = supabase();
   try {
-    const { data, error } = await supabaseClient
+    const query = supabaseClient
       .from("articles")
       .select("*")
-      .order("created_at", { ascending: false })
-      .filter("isshow", "eq", !!(process.env.APP_ENVIRONMENT === "production"));
+      .order("created_at", { ascending: false });
+
+    if (process.env.APP_ENVIRONMENT === "production") {
+      query.filter("isshow", "eq", true);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
       throw new Error(error.message);
@@ -82,11 +92,16 @@ export async function getArticlesData() {
 export async function getHistoryData() {
   const supabaseClient = supabase();
   try {
-    const { data, error } = await supabaseClient
+    const query = supabaseClient
       .from("history")
       .select("*")
-      .order("created_at", { ascending: false })
-      .filter("isshow", "eq", !!(process.env.APP_ENVIRONMENT === "production"));
+      .order("created_at", { ascending: false });
+
+    if (process.env.APP_ENVIRONMENT === "production") {
+      query.filter("isshow", "eq", true);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
       throw new Error(error.message);
@@ -119,15 +134,22 @@ export async function getContent({
 }) {
   const supabaseClient = supabase();
   try {
-    const { data, error } = await supabaseClient
-      .from(category)
-      .select("*")
-      .eq("postid", id)
-      .eq("isshow", !!(process.env.APP_ENVIRONMENT === "production"))
-      .single();
+    const query = supabaseClient.from(category).select("*").eq("postid", id);
+
+    if (process.env.APP_ENVIRONMENT === "production") {
+      query.eq("isshow", true);
+    }
+
+    query.single();
+
+    const { data, error } = await query;
 
     if (error) {
       throw new Error(error.message);
+    }
+
+    if (!data) {
+      throw new Error("No data found");
     }
 
     const result = data as PostDb;
