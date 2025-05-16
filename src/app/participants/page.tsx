@@ -5,7 +5,7 @@ import { Participants } from "@/components/Cards";
 import Loading from "@/components/Loading";
 import { MainTitle } from "@/components/Title";
 import generateMetadata from "@/lib/generateMetadata";
-import { getParticipantsData } from "@/lib/notion";
+import { getParticipantsData } from "@/lib/supabase";
 import { Suspense } from "react";
 
 export const metadata = generateMetadata({
@@ -24,9 +24,7 @@ export default function ParticipantsPage() {
   return (
     <>
       <MainTitle title="PARTICIPANTS" subtitle="프로젝트 참여자들" />
-      <Suspense fallback={<Loading />}>
-        <ParticipantsContent />
-      </Suspense>
+      <ParticipantsContent />
     </>
   );
 }
