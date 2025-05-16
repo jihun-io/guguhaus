@@ -193,3 +193,37 @@ export async function getContent({
     return null;
   }
 }
+
+export async function getParticipantsData() {
+  const supabaseClient = supabase();
+  try {
+    const query = supabaseClient
+      .from("participants")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (process.env.APP_ENVIRONMENT === "production") {
+      query.filter("isshow", "eq", true);
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return data?.map((item: ParticipantsDb) => {
+      return {
+        id: item.id,
+        artist: item.artist,
+        job: item.job,
+        image: item.image,
+        imageAlt: item.imagealt,
+        href: item.href,
+      } as ParticipantsItem;
+    });
+  } catch (error) {
+    console.error("Error fetching Participants data:", error);
+    return [];
+  }
+}
