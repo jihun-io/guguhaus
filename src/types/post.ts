@@ -42,7 +42,7 @@ export interface HistoryItem {
   postId: string;
   title: string;
   titleEng: string;
-  year: string;
+  date: string;
   historyCategory: string;
   image: string;
   imageAlt: string;
@@ -52,7 +52,7 @@ export interface HistoryDb {
   postid: string;
   title: string;
   titleeng: string;
-  year: string;
+  date: string;
   historycategory: string;
   thumbnail: string;
   imagealt: string;

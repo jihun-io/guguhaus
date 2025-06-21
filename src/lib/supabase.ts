@@ -95,7 +95,7 @@ export async function getHistoryData() {
     const query = supabaseClient
       .from("history")
       .select("*")
-      .order("created_at", { ascending: false });
+      .order("date", { ascending: false });
 
     if (process.env.APP_ENVIRONMENT === "production") {
       query.filter("isshow", "eq", true);
@@ -113,7 +113,7 @@ export async function getHistoryData() {
         postId: item.postid,
         title: item.title,
         titleEng: item.titleeng,
-        year: item.year,
+        date: item.date,
         historyCategory: item.historycategory,
         image: item.thumbnail,
         imageAlt: item.imagealt,

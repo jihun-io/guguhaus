@@ -7,6 +7,7 @@ interface CardProps {
     titleEng?: string;
     genre?: string;
     year?: string;
+    date?: string;
     href?: string;
     postId: string;
     image: string;
@@ -139,7 +140,7 @@ function HistoryCard({ data }: Readonly<CardProps>) {
       <h3 className="mt-2 mb-0 leading-6">{data.title}</h3>
       <p className="my-0 text-sm leading-4 uppercase">{data.titleEng}</p>
       <p className="mt-2 leading-5">
-        {data.historyCategory}, {data.year}
+        {data.historyCategory}, {data.date.split("-")[0]}
       </p>
     </Link>
   );
