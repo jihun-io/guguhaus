@@ -3,7 +3,7 @@ export default function PostArticle({ content }: { content: string }) {
     <article
       className={`
         prose 
-        prose-p:whitespace-pre-wrap
+        prose-p:whitespace-pre-line
         prose-strong:text-foreground 
         prose-li:text-foreground prose-li:marker:text-foreground
         prose-a:text-foreground
@@ -21,7 +21,7 @@ export function PostLimitedArticle({ content }: { content: string }) {
     <article
       className={`
         prose 
-        prose-p:whitespace-pre-wrap
+        prose-p:whitespace-pre-line
         prose-strong:text-foreground 
         prose-ul:mx-0 prose-ul:px-0 prose-ul:list-none
         prose-li:text-foreground prose-li:m-0 prose-li:p-0
