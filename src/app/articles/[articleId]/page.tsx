@@ -60,7 +60,7 @@ async function ArticlesContent({ articleId }: { articleId: string }) {
       />
       <h2 className="text-2xl">{articleContent.properties.title}</h2>
       <p>{articleContent.properties.category}</p>
-      <p>{articleContent.properties.desc}</p>
+      <p>{articleContent.properties.describes}</p>
       <p>
         {new Date(articleContent.properties.createdTime).toLocaleDateString(
           "ko-KR",
@@ -69,7 +69,7 @@ async function ArticlesContent({ articleId }: { articleId: string }) {
             month: "long",
             day: "numeric",
             weekday: "long",
-          },
+          }
         )}
       </p>
       <hr className="my-4" />

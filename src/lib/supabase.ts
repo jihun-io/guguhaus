@@ -15,7 +15,7 @@ import {
 export const supabase = () => {
   return createClient(
     process.env.SUPABASE_URL!,
-    process.env.SUPABASE_ANON_KEY!,
+    process.env.SUPABASE_ANON_KEY!
   );
 };
 
@@ -77,7 +77,7 @@ export async function getArticlesData() {
         id: item.id,
         postId: item.postid,
         title: item.title,
-        desc: item.desc,
+        describes: item.describes,
         articleCategory: item.articlecategory,
         image: item.thumbnail,
         imageAlt: item.imagealt,
@@ -183,6 +183,7 @@ export async function getContent({
         articleCategory: result.articlecategory,
         historyCategory: result.historycategory,
         desc: result.desc,
+        describes: result.describes,
         titleEng: result.titleeng,
         isDeleted: result.isdeleted,
       },

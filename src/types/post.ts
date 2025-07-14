@@ -22,7 +22,7 @@ export interface ArticleItem {
   id: string;
   postId: string;
   title: string;
-  desc: string;
+  describes: string;
   articleCategory: string;
   image: string;
   imageAlt: string;
@@ -31,7 +31,7 @@ export interface ArticleDb {
   id: string;
   postid: string;
   title: string;
-  desc: string;
+  describes: string;
   articlecategory: string;
   thumbnail: string;
   imagealt: string;
@@ -95,6 +95,7 @@ export interface PostTypes {
     historyCategory?: string;
     limitedCategory?: string;
     desc?: string;
+    describes?: string;
     titleEng?: string;
     isDeleted?: boolean;
     createdTime: string;
@@ -118,6 +119,7 @@ export interface PostDb {
   articlecategory?: string;
   historycategory?: string;
   desc?: string;
+  describes?: string;
   titleeng?: string;
   isdeleted?: boolean;
 }

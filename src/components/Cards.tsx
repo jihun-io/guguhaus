@@ -13,6 +13,7 @@ interface CardProps {
     image: string;
     imageAlt: string;
     desc?: string;
+    describes?: string;
     category?: string;
     articleCategory?: string;
     historyCategory?: string;
@@ -97,11 +98,11 @@ function ArticlesCard({ data }: Readonly<CardProps>) {
     >
       <h3 className="sr-only">{data.title}, </h3>
       <p className="sr-only">
-        {data.articleCategory}. {data.desc}
+        {data.articleCategory}. {data.describes}
       </p>
       <img
         src={data.image}
-        alt={data.imageAlt}
+        alt=""
         width={480}
         height={480}
         sizes="(max-width: 480px) 100vw, 480px"
