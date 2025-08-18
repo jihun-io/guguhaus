@@ -186,6 +186,7 @@ export async function getContent({
         describes: result.describes,
         titleEng: result.titleeng,
         isDeleted: result.isdeleted,
+        limitedCategory: result.limitedcategory,
       },
       htmlContent: result.htmlcontent,
     } as PostTypes;

@@ -118,6 +118,7 @@ export interface PostDb {
   genre?: string;
   articlecategory?: string;
   historycategory?: string;
+  limitedcategory?: string;
   desc?: string;
   describes?: string;
   titleeng?: string;
