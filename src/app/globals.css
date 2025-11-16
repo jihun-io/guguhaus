@@ -18,3 +18,19 @@ body {
   color: var(--foreground);
   font-family: var(--font-nanum-barun-gothic);
 }
+
+/* Swiper 오버플로우 방지 */
+.swiper {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.swiper-slide {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.swiper-wrapper {
+  max-width: 100% !important;
+}
+
