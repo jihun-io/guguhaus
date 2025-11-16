@@ -6,6 +6,8 @@ import "../../public/fonts/NanumBarunGothicBold/NanumBarunGothicBold.css";
 import "../../public/fonts/NanumBarunGothicLight/NanumBarunGothicLight.css";
 import "../../public/fonts/NanumBarunGothicUltraLight/NanumBarunGothicUltraLight.css";
 import "../../public/fonts/korail_Condensed/korail_Condensed.css";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "99haus",
@@ -19,7 +21,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={``}>{children}</body>
+      <body className="p-4 min-h-screen">
+        <Header />
+        <>{children}</>
+        <Footer />
+      </body>
     </html>
   );
 }
