@@ -21,9 +21,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className="p-4 min-h-screen">
+      <body className="p-4 min-h-screen grid grid-rows-[auto_1fr_auto] max-w-3xl mx-auto gap-11">
         <Header />
-        <>{children}</>
+        <div className="h-auto">{children}</div>
         <Footer />
       </body>
     </html>
