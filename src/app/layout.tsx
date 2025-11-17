@@ -20,10 +20,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko">
+    <html lang="ko" className="overflow-x-hidden">
       <body className="p-4 min-h-screen grid grid-rows-[auto_1fr_auto] max-w-3xl mx-auto gap-11">
         <Header />
-        <div className="h-auto">{children}</div>
+        <div className="h-auto overflow-x-hidden">{children}</div>
         <Footer />
       </body>
     </html>
