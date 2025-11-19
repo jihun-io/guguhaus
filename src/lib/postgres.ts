@@ -1,0 +1,15 @@
+import { Client } from "pg";
+
+const client = new Client({
+  user: process.env.PG_USER,
+  host: process.env.PG_HOST,
+  database: process.env.PG_DATABASE,
+  password: process.env.PG_PASSWORD,
+  port: Number(process.env.PG_PORT),
+});
+
+client.connect().catch((err) => {
+  console.error("PostgreSQL 연결에 실패했습니다:", err);
+});
+
+export default client;
