@@ -34,7 +34,7 @@ export default function BannerSlidesClient({
       <div className="relative">
         <h2
           className="absolute left-0 uppercase font-bold text-3xl z-10"
-          style={{ top: "calc(((100vw - 1rem) * 9 / 16))" }}
+          style={{ top: "calc(((min(100vw, 768px) - 1rem) * 9 / 16))" }}
         >
           Now <br />
           Presenting
