@@ -19,7 +19,7 @@ export default function Header() {
             <Link href="/originals">Ori9inals</Link>
           </li>
           <li className="text-xs sm:text-[1em] text-center uppercase">
-            <Link href="/merch">Merchandise</Link>
+            <Link href="/merch">Merch.</Link>
           </li>
           <li className="text-xs sm:text-[1em] text-center uppercase">
             <Link href="/participants">Participants</Link>
