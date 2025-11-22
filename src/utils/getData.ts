@@ -90,3 +90,25 @@ export async function getHistoryDetail(postId: string) {
     year: row.year,
   };
 }
+
+export async function getParticipantsData() {
+  const res = await client.query(
+    `SELECT * FROM participants ORDER BY "created_at" ASC`,
+  );
+
+  const rows = res.rows.map((row) => {
+    return {
+      createdAt: row.created_at,
+      artist: row.artist,
+      description: row.description,
+      href: row.href,
+      htmlContent: row.html_content,
+      id: row.id,
+      image: row.image,
+      imageAlt: row.image_alt,
+      job: row.job,
+    };
+  });
+
+  return rows;
+}
