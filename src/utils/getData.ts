@@ -65,3 +65,28 @@ export async function getHistoryData() {
   });
   return rows;
 }
+
+export async function getHistoryDetail(postId: string) {
+  const res = await client.query(
+    `SELECT * FROM history WHERE post_id = $1 AND ${isDev ? "TRUE" : "is_show = TRUE"} LIMIT 1`,
+    [postId],
+  );
+  const row = res.rows[0];
+  if (!row) {
+    return null;
+  }
+  return {
+    createdAt: row.created_at,
+    date: row.date,
+    historyCategory: row.history_category,
+    htmlContent: row.html_content,
+    id: row.id,
+    imgAlt: row.img_alt,
+    isShow: row.is_show,
+    postId: row.post_id,
+    thumbnail: row.thumbnail,
+    title: row.title,
+    titleEng: row.title_eng,
+    year: row.year,
+  };
+}

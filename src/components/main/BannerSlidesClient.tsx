@@ -5,6 +5,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Scrollbar, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/scrollbar";
+import Link from "next/link";
 
 type BannerData = {
   id: string;
@@ -54,18 +55,20 @@ export default function BannerSlidesClient({
         >
           {bannerData.map((data) => (
             <SwiperSlide key={data.id} style={{ width: "100%" }}>
-              <article className="w-full flex flex-col items-start justify-start gap-3.5">
-                <img
-                  className="aspect-video w-full object-cover mb-20"
-                  src={data.image}
-                  alt={data.imageAlt}
-                />
-                <p className="font-bold text-2xl">
-                  {data.title} <br />
-                  {data.titleEng}
-                </p>
-                <p>{data.description}</p>
-              </article>
+              <Link href={`/banner/${data.id}`} className="block w-full">
+                <article className="w-full flex flex-col items-start justify-start gap-3.5">
+                  <img
+                    className="aspect-video w-full object-cover mb-20"
+                    src={data.image}
+                    alt={data.imageAlt}
+                  />
+                  <p className="font-bold text-2xl">
+                    {data.title} <br />
+                    {data.titleEng}
+                  </p>
+                  <p>{data.description}</p>
+                </article>
+              </Link>
             </SwiperSlide>
           ))}
         </Swiper>
