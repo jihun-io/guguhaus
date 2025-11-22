@@ -11,7 +11,7 @@ export default function Header() {
         <p className="font-bold text-sm pb-6">Live. Laugh. Love.</p>
       </a>
       <nav className="w-full">
-        <ul className="grid grid-cols-3 justify-centert justify-between font-bold">
+        <ul className="grid grid-cols-4 justify-centert justify-between font-bold">
           <li
             aria-label="Originals"
             className="text-xs sm:text-[1em] text-center uppercase"
@@ -23,6 +23,9 @@ export default function Header() {
           </li>
           <li className="text-xs sm:text-[1em] text-center uppercase">
             <Link href="/participants">Participants</Link>
+          </li>
+          <li className="text-xs sm:text-[1em] text-center uppercase">
+            <Link href="/about">About</Link>
           </li>
         </ul>
       </nav>
