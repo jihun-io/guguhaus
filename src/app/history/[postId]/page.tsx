@@ -34,7 +34,7 @@ export default async function HistoryPage({
         </div>
         <hr className="border border-hr my-8" />
         <div
-          className="prose max-w-full prose-li:prose-p:my-0 prose-h4:text-2xl"
+          className="prose max-w-full prose-li:prose-p:my-0 prose-h4:text-2xl prose-p:whitespace-pre-wrap"
           dangerouslySetInnerHTML={{ __html: data.htmlContent }}
         ></div>
       </article>
