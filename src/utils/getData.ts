@@ -1,7 +1,11 @@
 import client from "@/lib/postgres";
 
+const isDev = process.env.APP_ENVIRONMENT === "dev";
+
 export async function getBannerData() {
-  const res = await client.query('SELECT * FROM banner ORDER BY "order" ASC');
+  const res = await client.query(
+    `SELECT * FROM banner WHERE ${isDev ? "TRUE" : "is_show = TRUE"} ORDER BY "order" ASC`,
+  );
   const rows = res.rows.map((row) => {
     return {
       createdAt: row.created_at,
@@ -21,12 +25,13 @@ export async function getBannerData() {
 
 export async function getMerchData() {
   const res = await client.query(
-    'SELECT * FROM merchandise ORDER BY "order" ASC',
+    `SELECT * FROM merchandise WHERE ${isDev ? "TRUE" : "is_show = TRUE"} ORDER BY "order" ASC`,
   );
   const rows = res.rows.map((row) => {
     return {
       createdAt: row.created_at,
       id: row.id,
+      postId: row.post_id,
       imageAlt: row.image_alt,
       isShow: row.is_show,
       order: row.order,
@@ -39,7 +44,9 @@ export async function getMerchData() {
 }
 
 export async function getHistoryData() {
-  const res = await client.query("SELECT * FROM history ORDER BY date DESC");
+  const res = await client.query(
+    `SELECT * FROM history WHERE ${isDev ? "TRUE" : "is_show = TRUE"} ORDER BY date DESC`,
+  );
   const rows = res.rows.map((row) => {
     return {
       createdAt: row.created_at,
