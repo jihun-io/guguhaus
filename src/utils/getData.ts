@@ -2,7 +2,61 @@ import client from "@/lib/postgres";
 
 const isDev = process.env.APP_ENVIRONMENT === "dev";
 
-export async function getBannerData() {
+export interface BannerData {
+  createdAt: string;
+  description: string;
+  id: number;
+  image: string;
+  imageAlt: string;
+  isShow: boolean;
+  order: number;
+  title: string;
+  titleEng: string;
+}
+
+export interface MerchData {
+  createdAt: string;
+  id: number;
+  postId: string;
+  imageAlt: string;
+  isShow: boolean;
+  order: number;
+  thumbnail: string;
+  title: string;
+  titleEng: string;
+}
+
+export interface HistoryData {
+  createdAt: string;
+  date: string;
+  historyCategory: string;
+  id: number;
+  imgAlt: string;
+  isShow: boolean;
+  postId: string;
+  thumbnail: string;
+  title: string;
+  titleEng: string;
+  year: number;
+}
+
+export interface HistoryDetailData extends HistoryData {
+  htmlContent: string;
+}
+
+export interface ParticipantData {
+  createdAt: string;
+  artist: string;
+  description: string;
+  href: string;
+  htmlContent: string;
+  id: number;
+  image: string;
+  imageAlt: string;
+  job: string;
+}
+
+export async function getBannerData(): Promise<BannerData[]> {
   const res = await client.query(
     `SELECT * FROM banner WHERE ${isDev ? "TRUE" : "is_show = TRUE"} ORDER BY "order" ASC`,
   );
@@ -23,7 +77,7 @@ export async function getBannerData() {
   return rows;
 }
 
-export async function getMerchData() {
+export async function getMerchData(): Promise<MerchData[]> {
   const res = await client.query(
     `SELECT * FROM merchandise WHERE ${isDev ? "TRUE" : "is_show = TRUE"} ORDER BY "order" ASC`,
   );
@@ -43,7 +97,7 @@ export async function getMerchData() {
   return rows;
 }
 
-export async function getHistoryData() {
+export async function getHistoryData(): Promise<HistoryData[]> {
   const res = await client.query(
     `SELECT * FROM history WHERE ${isDev ? "TRUE" : "is_show = TRUE"} ORDER BY date DESC`,
   );
@@ -52,7 +106,6 @@ export async function getHistoryData() {
       createdAt: row.created_at,
       date: row.date,
       historyCategory: row.history_category,
-      htmlContent: row.html_content,
       id: row.id,
       imgAlt: row.img_alt,
       isShow: row.is_show,
@@ -66,7 +119,9 @@ export async function getHistoryData() {
   return rows;
 }
 
-export async function getHistoryDetail(postId: string) {
+export async function getHistoryDetail(
+  postId: string,
+): Promise<HistoryDetailData | null> {
   const res = await client.query(
     `SELECT * FROM history WHERE post_id = $1 AND ${isDev ? "TRUE" : "is_show = TRUE"} LIMIT 1`,
     [postId],
@@ -91,7 +146,7 @@ export async function getHistoryDetail(postId: string) {
   };
 }
 
-export async function getParticipantsData() {
+export async function getParticipantsData(): Promise<ParticipantData[]> {
   const res = await client.query(
     `SELECT * FROM participants ORDER BY "created_at" ASC`,
   );
