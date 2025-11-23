@@ -56,7 +56,7 @@ export default function BannerSlidesClient({
           {bannerData.title} <br />
           {bannerData.titleEng}
         </p>
-        <p>{bannerData.description}</p>
+        <p className="break-keep">{bannerData.description}</p>
       </article>
     </section>
   );
