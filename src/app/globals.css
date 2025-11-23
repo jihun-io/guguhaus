@@ -17,7 +17,7 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-nanum-barun-gothic);
+  font-family: var(--font-nanum-barun-gothic), sans-serif;
 }
 
 /* Swiper 오버플로우 방지 */
