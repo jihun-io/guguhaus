@@ -5,18 +5,23 @@ const isDev = process.env.APP_ENVIRONMENT === "dev";
 export interface BannerData {
   createdAt: string;
   description: string;
-  id: number;
-  image: string;
-  imageAlt: string;
+  id: string;
   isShow: boolean;
-  order: number;
   title: string;
   titleEng: string;
 }
 
+export interface BannerImagesData {
+  bannerId: string;
+  id: string;
+  image: string;
+  imageAlt: string;
+  order: number;
+}
+
 export interface MerchData {
   createdAt: string;
-  id: number;
+  id: string;
   postId: string;
   imageAlt: string;
   isShow: boolean;
@@ -30,7 +35,7 @@ export interface HistoryData {
   createdAt: string;
   date: string;
   historyCategory: string;
-  id: number;
+  id: string;
   imgAlt: string;
   isShow: boolean;
   postId: string;
@@ -50,7 +55,7 @@ export interface ParticipantData {
   description: string;
   href: string;
   htmlContent: string;
-  id: number;
+  id: string;
   image: string;
   imageAlt: string;
   job: string;
@@ -58,22 +63,38 @@ export interface ParticipantData {
 
 export async function getBannerData(): Promise<BannerData[]> {
   const res = await client.query(
-    `SELECT * FROM banner WHERE ${isDev ? "TRUE" : "is_show = TRUE"} ORDER BY "order" ASC`,
+    `SELECT * FROM banner WHERE ${isDev ? "TRUE" : "is_show = TRUE"}`,
   );
   const rows = res.rows.map((row) => {
     return {
       createdAt: row.created_at,
       description: row.description,
       id: row.id,
-      image: row.image,
-      imageAlt: row.image_alt,
       isShow: row.is_show,
-      order: row.order,
       title: row.title,
       titleEng: row.title_eng,
     };
   });
 
+  return rows;
+}
+
+export async function getBannerImagesData(
+  bannerId: string,
+): Promise<BannerImagesData[]> {
+  const res = await client.query(
+    `SELECT * FROM banner_images WHERE banner_id = $1 ORDER BY "order" ASC`,
+    [bannerId],
+  );
+  const rows = res.rows.map((row) => {
+    return {
+      bannerId: row.banner_id,
+      id: row.id,
+      image: row.image,
+      imageAlt: row.image_alt,
+      order: row.order,
+    };
+  });
   return rows;
 }
 
