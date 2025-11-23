@@ -30,7 +30,7 @@ function HistoryCard({
       <p className="font-bold">{title}</p>
       <p className="uppercase">{titleEng}</p>
       <p>
-        {historyCategory}, {date.split("-")[0]}
+        {historyCategory.replaceAll(",", ", ")}, {date.split("-")[0]}
       </p>
     </Link>
   );

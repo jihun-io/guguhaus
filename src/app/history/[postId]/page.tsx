@@ -29,7 +29,8 @@ export default async function HistoryPage({
           <h3 className="font-bold text-2xl">{data.title}</h3>
           <p className="uppercase">{data.titleEng}</p>
           <p>
-            {data.historyCategory}, {data.date.split("-")[0]}
+            {data.historyCategory.replaceAll(",", ", ")},{" "}
+            {data.date.split("-")[0]}
           </p>
         </div>
         <hr className="border border-hr my-8" />
