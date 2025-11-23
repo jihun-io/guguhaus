@@ -5,7 +5,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Scrollbar, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/scrollbar";
-import Link from "next/link";
 import { BannerData, BannerImagesData } from "@/utils/getData";
 
 // 클라이언트 컴포넌트: Swiper UI만 담당
