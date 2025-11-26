@@ -50,7 +50,7 @@ export default function MerchSlidesClient({
         {merchData.map((data) => (
           <SwiperSlide key={data.id} style={{ width: "100%" }}>
             <Link
-              href={`/merch/${data.postId}`}
+              href={`/merch#${data.postId}`}
               key={data.id}
               className="block w-full"
             >
