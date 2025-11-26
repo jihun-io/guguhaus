@@ -29,6 +29,17 @@ export interface MerchData {
   thumbnail: string;
   title: string;
   titleEng: string;
+  merchandiseItems: MerchItem[];
+}
+
+export interface MerchItem {
+  id: string;
+  merchandiseId: string;
+  isShow: boolean;
+  image: string;
+  imageAlt: string;
+  title: string;
+  titleEng: string;
 }
 
 export interface HistoryData {
@@ -65,7 +76,7 @@ export async function getBannerData(): Promise<BannerData[]> {
   const res = await client.query(
     `SELECT * FROM banner WHERE ${isDev ? "TRUE" : "is_show = TRUE"}`,
   );
-  const rows = res.rows.map((row) => {
+  return res.rows.map((row) => {
     return {
       createdAt: row.created_at,
       description: row.description,
@@ -75,8 +86,6 @@ export async function getBannerData(): Promise<BannerData[]> {
       titleEng: row.title_eng,
     };
   });
-
-  return rows;
 }
 
 export async function getBannerImagesData(
@@ -86,7 +95,7 @@ export async function getBannerImagesData(
     `SELECT * FROM banner_images WHERE banner_id = $1 ORDER BY "order" ASC`,
     [bannerId],
   );
-  const rows = res.rows.map((row) => {
+  return res.rows.map((row) => {
     return {
       bannerId: row.banner_id,
       id: row.id,
@@ -95,34 +104,81 @@ export async function getBannerImagesData(
       order: row.order,
     };
   });
-  return rows;
 }
 
 export async function getMerchData(): Promise<MerchData[]> {
   const res = await client.query(
-    `SELECT * FROM merchandise WHERE ${isDev ? "TRUE" : "is_show = TRUE"} ORDER BY "order" ASC`,
+    `SELECT 
+      m.*,
+      mi.id as item_id,
+      mi.is_show as item_is_show,
+      mi.image as item_image,
+      mi.image_alt as item_image_alt,
+      mi.title as item_title,
+      mi.title_eng as item_title_eng
+    FROM merchandise m
+    LEFT JOIN merchandise_items mi ON m.id = mi.merchandise_id
+    WHERE ${isDev ? "TRUE" : "m.is_show = TRUE AND (mi.is_show = TRUE OR mi.is_show IS NULL)"}
+    ORDER BY m.order ASC`,
   );
-  const rows = res.rows.map((row) => {
+
+  // Map을 사용하여 merchandise와 그에맞는 merchandise items를 그룹화
+  const merchMap = new Map<string, MerchData>();
+
+  res.rows.forEach((row) => {
+    if (!merchMap.has(row.id)) {
+      merchMap.set(row.id, {
+        createdAt: row.created_at,
+        id: row.id,
+        postId: row.post_id,
+        imageAlt: row.image_alt,
+        isShow: row.is_show,
+        order: row.order,
+        thumbnail: row.thumbnail,
+        title: row.title,
+        titleEng: row.title_eng,
+        merchandiseItems: [],
+      });
+    }
+
+    if (row.item_id) {
+      merchMap.get(row.id)!.merchandiseItems.push({
+        id: row.item_id,
+        merchandiseId: row.id,
+        isShow: row.item_is_show,
+        image: row.item_image,
+        imageAlt: row.item_image_alt,
+        title: row.item_title,
+        titleEng: row.item_title_eng,
+      });
+    }
+  });
+
+  return Array.from(merchMap.values());
+}
+
+export async function getMerchItemsData(): Promise<MerchItem[]> {
+  const res = await client.query(
+    `SELECT * FROM merchandise_items WHERE ${isDev ? "TRUE" : "m.is_show = TRUE"}`,
+  );
+  return res.rows.map((row) => {
     return {
-      createdAt: row.created_at,
       id: row.id,
-      postId: row.post_id,
-      imageAlt: row.image_alt,
+      merchandiseId: row.merchandise_id,
       isShow: row.is_show,
-      order: row.order,
-      thumbnail: row.thumbnail,
+      image: row.image,
+      imageAlt: row.image_alt,
       title: row.title,
       titleEng: row.title_eng,
     };
   });
-  return rows;
 }
 
 export async function getHistoryData(): Promise<HistoryData[]> {
   const res = await client.query(
     `SELECT * FROM history WHERE ${isDev ? "TRUE" : "is_show = TRUE"} ORDER BY date DESC`,
   );
-  const rows = res.rows.map((row) => {
+  return res.rows.map((row) => {
     return {
       createdAt: row.created_at,
       date: row.date,
@@ -137,7 +193,6 @@ export async function getHistoryData(): Promise<HistoryData[]> {
       year: row.year,
     };
   });
-  return rows;
 }
 
 export async function getHistoryDetail(
@@ -172,7 +227,7 @@ export async function getParticipantsData(): Promise<ParticipantData[]> {
     `SELECT * FROM participants ORDER BY "created_at" ASC`,
   );
 
-  const rows = res.rows.map((row) => {
+  return res.rows.map((row) => {
     return {
       createdAt: row.created_at,
       artist: row.artist,
@@ -185,6 +240,4 @@ export async function getParticipantsData(): Promise<ParticipantData[]> {
       job: row.job,
     };
   });
-
-  return rows;
 }
