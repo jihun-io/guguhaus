@@ -13,7 +13,7 @@ export default function MerchClient({
   useEffect(() => {
     const hash = window.location.hash.slice(1); // '#' 제거
     setSelectedItem(hash || merchandises[0]?.postId || null);
-  }, [selectedItem]);
+  }, []);
 
   return (
     <section>
