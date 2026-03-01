@@ -48,15 +48,15 @@ export default function BannerSlidesClient({
             </SwiperSlide>
           ))}
         </Swiper>
-        <h2 className="uppercase font-bold text-3xl">
+        <h2 className="uppercase font-bold text-xl leading-[1.2]">
           Now <br />
           Presenting
         </h2>
-        <p className="font-bold text-2xl">
+        <p className="font-bold text-lg leading-[1.2]">
           {bannerData.title} <br />
           {bannerData.titleEng}
         </p>
-        <p className="break-keep">{bannerData.description}</p>
+        <p className="break-keep leading-[1.2]">{bannerData.description}</p>
       </article>
     </section>
   );

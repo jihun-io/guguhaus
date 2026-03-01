@@ -2,8 +2,9 @@
 @plugin '@tailwindcss/typography';
 
 :root {
-  --background: #ffffff;
-  --foreground: #1C1C1C;
+  --background: #f3f3f3;
+  --foreground: #1c1c1c;
+  font-size: 11px;
 }
 
 @theme inline {
@@ -11,7 +12,12 @@
   --color-foreground: var(--foreground);
   --font-nanum-barun-gothic: "NanumBarunGothic";
   --font-korail-condensed: "korail_Condensed";
-  --color-hr: #D7C9C5;
+  --color-hr: #d7c9c5;
+  --text-base: 1rem;
+  --text-sm: 0.8182rem;
+  --text-md: 1.2727rem;
+  --text-lg: 1.455rem;
+  --text-xl: 3rem;
 }
 
 body {
@@ -35,3 +41,8 @@ body {
   max-width: 100% !important;
 }
 
+@media screen and (min-width: 768px) {
+  :root {
+    font-size: 14px;
+  }
+}

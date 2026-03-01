@@ -7,7 +7,7 @@ export default async function ParticipantsPage() {
     <section>
       <h2 className="uppercase font-bold text-3xl">Participants</h2>
       <p>구구하우스 프로젝트에 참여했던 고마운 분들을 소개합니다</p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
+      <div className="grid grid-cols-2 gap-6 mt-6">
         {participantsData.map((participant) => (
           <article key={participant.id} className="my-4">
             <a href={participant.href} className="flex flex-col items-center">

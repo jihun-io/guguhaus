@@ -25,9 +25,13 @@ function HistoryCard({
   date,
 }: Readonly<HistoryData>) {
   return (
-    <Link href={`/history/${postId}`} className="ml-auto mr-auto max-w-lg">
-      <img src={thumbnail} alt={imgAlt} className="pb-3" />
-      <p className="font-bold">{title}</p>
+    <Link href={`/history/${postId}`} className="ml-auto mr-auto">
+      <img
+        src={thumbnail}
+        alt={imgAlt}
+        className="pb-3 aspect-210/297 object-contain"
+      />
+      <p className="font-bold text-lg">{title}</p>
       <p className="uppercase">{titleEng}</p>
       <p>
         {historyCategory.replaceAll(",", ", ")}, {date.split("-")[0]}
@@ -45,9 +49,9 @@ export default function HistoryClient({
   const hasMore = visibleCount < historyData.length;
 
   return (
-    <section className="w-full flex flex-col gap-6">
-      <h2 className="uppercase font-bold text-3xl">History</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+    <section className="w-full flex flex-col">
+      <h2 className="uppercase font-bold text-xl mb-[2.181818rem]">History</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-[2.181818rem] px-17.5">
         {historyData.slice(0, visibleCount).map((data) => (
           <HistoryCard key={data.id} {...data} />
         ))}

@@ -32,14 +32,13 @@ export default function MerchSlidesClient({
 
   return (
     <section className="w-full flex flex-col gap-4">
-      <h2 className="uppercase font-bold text-3xl">Merchandise</h2>
+      <h2 className="uppercase font-bold text-[3rem]">Merchandise</h2>
       <Swiper
         key={mounted ? "merch-swiper" : "loading"}
-        modules={[Scrollbar, Autoplay]}
+        modules={[Autoplay]}
         spaceBetween={20}
         slidesPerView={1}
         className="w-full"
-        scrollbar={{ draggable: true }}
         autoplay={{
           delay: 5000,
           disableOnInteraction: false,
@@ -58,11 +57,13 @@ export default function MerchSlidesClient({
                 <img
                   src={data.thumbnail}
                   alt={data.imageAlt}
-                  className="aspect-[4/3] w-full h-64 object-contain"
+                  className="aspect-215/265 h-[265px] object-contain"
                 />
                 <div className="text-center">
-                  <p>{data.title}</p>
-                  <p className="uppercase">{data.titleEng}</p>
+                  <p className="text-[1.455rem]">{data.title}</p>
+                  <p className="uppercase font-light text-[0.9rem]">
+                    {data.titleEng}
+                  </p>
                 </div>
               </article>
             </Link>

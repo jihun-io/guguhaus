@@ -8,7 +8,7 @@ export default async function Home() {
   const historyData = await getHistoryData();
 
   return (
-    <main className="flex flex-col items-center justify-center w-full gap-12">
+    <main className="flex flex-col items-center justify-center w-full gap-16">
       <BannerSlides />
       <MerchSlides />
       <HistoryClient historyData={historyData} />
