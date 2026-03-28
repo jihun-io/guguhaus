@@ -17,7 +17,10 @@ export default function Header() {
         <p className="sr-only">Presents</p>
       </a>
       <nav className="w-full">
-        <ul className="text-[0.9rem] grid grid-cols-4 justify-centert justify-between font-bold">
+        <ul className="text-[0.9rem] grid grid-cols-5 justify-centert justify-between font-bold">
+          <li className="text-center uppercase">
+            <Link href="/#works">Works</Link>
+          </li>
           <li aria-label="Originals" className="text-center uppercase">
             <Link href="/originals">Ori9inals</Link>
           </li>

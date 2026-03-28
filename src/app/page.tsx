@@ -1,7 +1,7 @@
 import Image from "next/image";
 import BannerSlides from "@/components/main/BannerSlides";
 import MerchSlides from "@/components/main/MerchSlides";
-import HistoryClient from "@/components/main/History";
+import WorksClient from "@/components/main/Works";
 import { getHistoryData } from "@/utils/getData";
 
 export default async function Home() {
@@ -11,7 +11,7 @@ export default async function Home() {
     <main className="flex flex-col items-center justify-center w-full gap-16">
       <BannerSlides />
       <MerchSlides />
-      <HistoryClient historyData={historyData} />
+      <WorksClient historyData={historyData} />
     </main>
   );
 }

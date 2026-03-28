@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 
-type HistoryData = {
+type WorksData = {
   id: string;
   postId: string;
   thumbnail: string;
@@ -14,7 +14,7 @@ type HistoryData = {
   date: string;
 };
 
-function HistoryCard({
+function WorksCard({
   id,
   postId,
   thumbnail,
@@ -23,7 +23,7 @@ function HistoryCard({
   titleEng,
   historyCategory,
   date,
-}: Readonly<HistoryData>) {
+}: Readonly<WorksData>) {
   return (
     <Link href={`/history/${postId}`} className="ml-auto mr-auto">
       <img
@@ -40,20 +40,20 @@ function HistoryCard({
   );
 }
 
-export default function HistoryClient({
+export default function WorksClient({
   historyData,
 }: Readonly<{
-  historyData: HistoryData[];
+  historyData: WorksData[];
 }>) {
   const [visibleCount, setVisibleCount] = useState(4);
   const hasMore = visibleCount < historyData.length;
 
   return (
-    <section className="w-full flex flex-col">
-      <h2 className="uppercase font-bold text-xl mb-[2.181818rem]">History</h2>
+    <section id="works" className="w-full flex flex-col">
+      <h2 className="uppercase font-bold text-xl mb-[2.181818rem]">Works</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-[2.181818rem] px-17.5">
         {historyData.slice(0, visibleCount).map((data) => (
-          <HistoryCard key={data.id} {...data} />
+          <WorksCard key={data.id} {...data} />
         ))}
       </div>
       {hasMore && (
