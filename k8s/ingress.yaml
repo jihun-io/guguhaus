@@ -1,0 +1,33 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: guguhaus-ingress
+  namespace: guguhaus
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+spec:
+  rules:
+    - host: 99haus.net
+      http:
+        paths:
+          - path: /storage
+            pathType: Prefix
+            backend:
+              service:
+                name: guguhaus-storage-api
+                port:
+                  number: 5000
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: guguhaus-backend
+                port:
+                  number: 3080
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: guguhaus-frontend
+                port:
+                  number: 3000
