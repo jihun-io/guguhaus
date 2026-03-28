@@ -1,12 +1,7 @@
-import { getHistoryData, getHistoryDetail } from "@/utils/getData";
+import { getHistoryDetail } from "@/utils/getData";
 import NotFound from "@/app/not-found";
 
-export async function generateStaticParams() {
-  const historyData = await getHistoryData();
-  return historyData.map((data) => ({
-    postId: data.postId,
-  }));
-}
+export const dynamic = "force-dynamic";
 
 export default async function HistoryPage({
   params,
