@@ -28,7 +28,21 @@ export default function MerchSlidesClient({
     setMounted(true);
   }, []);
 
-  if (!mounted) return null;
+  if (!mounted)
+    return (
+      <section className="w-full flex flex-col gap-4">
+        <h2 className="uppercase font-bold text-[3rem]">Merchandise</h2>
+        <article className="flex flex-col items-center justify-start font-bold gap-4">
+          <div className="aspect-215/265 h-[265px]" />
+          <div className="text-center">
+            <p className="text-[1.455rem]">{merchData[0]?.title}</p>
+            <p className="uppercase font-light text-[0.9rem]">
+              {merchData[0]?.titleEng}
+            </p>
+          </div>
+        </article>
+      </section>
+    );
 
   return (
     <section className="w-full flex flex-col gap-4">

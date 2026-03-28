@@ -20,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className="overflow-x-hidden scroll-smooth">
+    <html lang="ko" className="overflow-x-hidden">
       <body className="p-[1.45454545rem] min-h-screen grid grid-rows-[auto_1fr_auto] max-w-3xl mx-auto">
         <Header />
         <div className="h-auto overflow-x-hidden">{children}</div>

@@ -21,7 +21,23 @@ export default function BannerSlidesClient({
     setMounted(true);
   }, []);
 
-  if (!mounted) return null;
+  if (!mounted)
+    return (
+      <section className="w-full relative">
+        <article className="w-full flex flex-col items-start justify-start gap-3.5">
+          <div className="aspect-video w-full" style={{ paddingBottom: "1rem" }} />
+          <h2 className="uppercase font-bold text-xl leading-[1.2]">
+            Now <br />
+            Presenting
+          </h2>
+          <p className="font-bold text-lg leading-[1.2]">
+            {bannerData.title} <br />
+            {bannerData.titleEng}
+          </p>
+          <p className="break-keep leading-[1.2]">{bannerData.description}</p>
+        </article>
+      </section>
+    );
 
   return (
     <section className="w-full relative">

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import WorksLink from "./WorksLink";
 
 export default function Header() {
   return (
@@ -19,7 +20,7 @@ export default function Header() {
       <nav className="w-full">
         <ul className="text-[0.9rem] grid grid-cols-5 justify-centert justify-between font-bold">
           <li className="text-center uppercase">
-            <Link href="/#works">Works</Link>
+            <WorksLink />
           </li>
           <li aria-label="Originals" className="text-center uppercase">
             <Link href="/originals">Ori9inals</Link>

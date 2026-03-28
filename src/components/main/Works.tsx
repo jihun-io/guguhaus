@@ -25,11 +25,11 @@ function WorksCard({
   date,
 }: Readonly<WorksData>) {
   return (
-    <Link href={`/history/${postId}`} className="ml-auto mr-auto">
+    <Link href={`/history/${postId}`} className="ml-auto mr-auto w-full">
       <img
         src={thumbnail}
         alt={imgAlt}
-        className="pb-3 aspect-210/297 object-contain"
+        className="w-full pb-3 aspect-210/297 object-contain"
       />
       <p className="font-bold text-lg">{title}</p>
       <p className="uppercase">{titleEng}</p>
