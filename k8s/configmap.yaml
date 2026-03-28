@@ -14,5 +14,5 @@ data:
   NOTION_LIMITED_ID: "1d4c305ec49380e4b15ccaf403113bf9"
   NOTION_BANNER_ID: "1dac305ec4938014a0def98c16213764"
   PG_HOST: "guguhaus-postgres.guguhaus.svc.cluster.local"
-  PG_DATABASE: "guguhaus"
+  PG_DATABASE: "postgres"
   PG_PORT: "5432"
