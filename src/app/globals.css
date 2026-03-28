@@ -1,97 +1,48 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@plugin '@tailwindcss/typography';
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+:root {
+  --background: #f3f3f3;
+  --foreground: #1c1c1c;
+  font-size: 11px;
 }
 
-@layer base {
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-nanum-barun-gothic: "NanumBarunGothic";
+  --font-korail-condensed: "korail_Condensed";
+  --color-hr: #d7c9c5;
+  --text-base: 1rem;
+  --text-sm: 0.8182rem;
+  --text-md: 1.2727rem;
+  --text-lg: 1.455rem;
+  --text-xl: 3rem;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-nanum-barun-gothic), sans-serif;
+}
+
+/* Swiper 오버플로우 방지 */
+.swiper {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.swiper-slide {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.swiper-wrapper {
+  max-width: 100% !important;
+}
+
+@media screen and (min-width: 768px) {
   :root {
-    --font-nanum-barun-gothic: "NanumBarunGothic";
-    --font-korail-condensed: "korail_Condensed";
-    --background: #000000;
-    --foreground: #ffffff;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-  }
-  .font-outline-base {
-    -webkit-text-stroke: 0.5px var(--background);
-  }
-  .font-outline-1 {
-    -webkit-text-stroke: 1px var(--background);
-  }
-
-  .font-outline-2 {
-    -webkit-text-stroke: 2px var(--background);
-  }
-  .font-outline-4 {
-    -webkit-text-stroke: 4px var(--background);
-  }
-
-  /* shadcn 셀렉트 박스 클릭 시 body의 padding이 변경되는 문제 해결 */
-  body[data-scroll-locked] {
-    padding-left: 2rem !important;
-    padding-right: 2rem !important;
-  }
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    word-break: keep-all;
-  }
-
-  p {
-    word-break: break-all;
-  }
-
-  a {
-    @apply text-foreground;
-  }
-
-  ol > li > ol > li {
-    list-style-type: lower-alpha;
-  }
-
-  ol > li > ol > li > ol > li {
-    list-style-type: lower-roman;
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-
-  h2 {
-    @apply font-korail-condensed;
+    font-size: 14px;
   }
 }

@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: guguhaus-frontend
+  namespace: guguhaus
+  labels:
+    app: guguhaus-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: guguhaus-frontend
+  template:
+    metadata:
+      labels:
+        app: guguhaus-frontend
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+        - name: frontend
+          image: ghcr.io/jihun-io/guguhaus-frontend:latest
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: guguhaus-frontend-config
+          env:
+            - name: NOTION_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: guguhaus-notion-secret
+                  key: notion-secret
+            - name: PG_USER
+              valueFrom:
+                secretKeyRef:
+                  name: guguhaus-db-secret
+                  key: username
+            - name: PG_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: guguhaus-db-secret
+                  key: password
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 5

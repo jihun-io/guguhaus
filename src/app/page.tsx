@@ -1,34 +1,17 @@
-export const runtime = "edge";
-export const dynamic = "force-dynamic";
+import Image from "next/image";
+import BannerSlides from "@/components/main/BannerSlides";
+import MerchSlides from "@/components/main/MerchSlides";
+import WorksClient from "@/components/main/Works";
+import { getHistoryData } from "@/utils/getData";
 
-import { Articles, History, WorkInProgress } from "@/components/Cards";
-
-import { getWipData, getArticlesData, getHistoryData } from "@/lib/supabase";
-
-import generateMetadata from "@/lib/generateMetadata";
-
-export const metadata = generateMetadata({});
-
-async function Feeds() {
-  // const bannerData = await getBannerData();
-  const wipData = await getWipData();
-  const articlesData = await getArticlesData();
+export default async function Home() {
   const historyData = await getHistoryData();
 
   return (
-    <>
-      {/*{bannerData && <Banner data={bannerData} />}*/}
-      <WorkInProgress data={wipData} />
-      <Articles data={articlesData} />
-      <History data={historyData} />
-    </>
-  );
-}
-
-export default function Home() {
-  return (
-    <>
-      <Feeds />
-    </>
+    <main className="flex flex-col items-center justify-center w-full gap-16">
+      <BannerSlides />
+      <MerchSlides />
+      <WorksClient historyData={historyData} />
+    </main>
   );
 }

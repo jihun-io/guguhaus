@@ -1,30 +1,28 @@
-export const runtime = "edge";
-export const dynamic = "force-dynamic";
+import { getParticipantsData } from "@/utils/getData";
 
-import { Participants } from "@/components/Cards";
-import Loading from "@/components/Loading";
-import { MainTitle } from "@/components/Title";
-import generateMetadata from "@/lib/generateMetadata";
-import { getParticipantsData } from "@/lib/supabase";
-import { Suspense } from "react";
+export default async function ParticipantsPage() {
+  const participantsData = await getParticipantsData();
 
-export const metadata = generateMetadata({
-  title: "PARTICIPANTS - 99haus",
-  description: "프로젝트 참여자들",
-  currentPage: "participants",
-});
-
-async function ParticipantsContent() {
-  const newArtistsData = await getParticipantsData();
-
-  return <Participants artists={newArtistsData} />;
-}
-
-export default function ParticipantsPage() {
   return (
-    <>
-      <MainTitle title="PARTICIPANTS" subtitle="프로젝트 참여자들" />
-      <ParticipantsContent />
-    </>
+    <section>
+      <h2 className="uppercase font-bold text-3xl">Participants</h2>
+      <p>구구하우스 프로젝트에 참여했던 고마운 분들을 소개합니다</p>
+      <div className="grid grid-cols-2 gap-6 mt-6">
+        {participantsData.map((participant) => (
+          <article key={participant.id} className="my-4">
+            <a href={participant.href} className="flex flex-col items-center">
+              <img
+                className="h-48 object-cover mb-4"
+                src={participant.image}
+                alt={participant.imageAlt}
+              />
+              <p>{participant.description}</p>
+              <p className="">{participant.job}</p>
+              <p className="font-bold">{participant.artist}</p>
+            </a>
+          </article>
+        ))}
+      </div>
+    </section>
   );
 }
