@@ -4,6 +4,8 @@ import MerchSlides from "@/components/main/MerchSlides";
 import WorksClient from "@/components/main/Works";
 import { getHistoryData } from "@/utils/getData";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const historyData = await getHistoryData();
 
