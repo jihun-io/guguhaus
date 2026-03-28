@@ -4,7 +4,6 @@ on:
   push:
     branches: [main]
     paths-ignore:
-      - 'k8s/**'
       - '*.md'
 
 env:
@@ -15,7 +14,7 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
       packages: write
 
     steps:
@@ -37,11 +36,19 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
 
-      - name: Update k8s manifest
+      - name: Update k8s manifest in guguhaus-k8s
+        uses: actions/checkout@v4
+        with:
+          repository: jihun-io/guguhaus-k8s
+          token: ${{ secrets.K8S_REPO_TOKEN }}
+          path: guguhaus-k8s
+
+      - name: Patch image tag and push
         run: |
-          sed -i "s|image: .*guguhaus-frontend.*|image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}|" k8s/deployment.yaml
+          sed -i "s|image: .*guguhaus-frontend.*|image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}|" guguhaus-k8s/frontend/deployment.yaml
+          cd guguhaus-k8s
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add k8s/deployment.yaml
+          git add frontend/deployment.yaml
           git commit -m "chore: update frontend image to ${{ github.sha }}"
           git push
