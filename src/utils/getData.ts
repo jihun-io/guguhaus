@@ -38,6 +38,7 @@ export interface MerchItem {
   isShow: boolean;
   image: string;
   imageAlt: string;
+  order: number;
   title: string;
   titleEng: string;
 }
@@ -108,18 +109,19 @@ export async function getBannerImagesData(
 
 export async function getMerchData(): Promise<MerchData[]> {
   const res = await client.query(
-    `SELECT 
+    `SELECT
       m.*,
       mi.id as item_id,
       mi.is_show as item_is_show,
       mi.image as item_image,
       mi.image_alt as item_image_alt,
+      mi.order as item_order,
       mi.title as item_title,
       mi.title_eng as item_title_eng
     FROM merchandise m
     LEFT JOIN merchandise_items mi ON m.id = mi.merchandise_id
     WHERE ${isDev ? "TRUE" : "m.is_show = TRUE AND (mi.is_show = TRUE OR mi.is_show IS NULL)"}
-    ORDER BY m.order ASC`,
+    ORDER BY m.order ASC, mi.order ASC`,
   );
 
   // Map을 사용하여 merchandise와 그에맞는 merchandise items를 그룹화
@@ -148,6 +150,7 @@ export async function getMerchData(): Promise<MerchData[]> {
         isShow: row.item_is_show,
         image: row.item_image,
         imageAlt: row.item_image_alt,
+        order: row.item_order,
         title: row.item_title,
         titleEng: row.item_title_eng,
       });
@@ -168,6 +171,7 @@ export async function getMerchItemsData(): Promise<MerchItem[]> {
       isShow: row.is_show,
       image: row.image,
       imageAlt: row.image_alt,
+      order: row.order,
       title: row.title,
       titleEng: row.title_eng,
     };
