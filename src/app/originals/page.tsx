@@ -1,6 +1,11 @@
 import VHS from "@/components/originals/VHS";
+import { getOriginalsData } from "@/utils/getData";
 
-export default function OriginalsPage() {
+export const dynamic = "force-dynamic";
+
+export default async function OriginalsPage() {
+  const originalsData = await getOriginalsData();
+
   return (
     <section>
       <h2 className="uppercase font-bold text-3xl" aria-label="Originals">
@@ -11,7 +16,18 @@ export default function OriginalsPage() {
         구구하우스에서 제작한 오리지널 콘텐츠를 소개합니다.
       </p>
 
-      <VHS title="혹성의 아이" subtitle="A Child From Green Planet" />
+      <div className="flex flex-col gap-8">
+        {originalsData.map((item) => (
+          <div key={item.id}>
+            <VHS
+              title={item.title}
+              subtitle={item.titleEng}
+              period={item.workPeriod ?? ""}
+              vhsImage={item.tapeImage ?? ""}
+            />
+          </div>
+        ))}
+      </div>
     </section>
   );
 }

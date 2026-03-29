@@ -222,6 +222,35 @@ export async function getHistoryDetail(
   };
 }
 
+export interface OriginalsData {
+  id: string;
+  postId: string;
+  title: string;
+  titleEng: string;
+  tapeImage: string | null;
+  workPeriod: string | null;
+  category: string;
+  isShow: boolean;
+  createdAt: string;
+}
+
+export async function getOriginalsData(): Promise<OriginalsData[]> {
+  const res = await client.query(
+    `SELECT * FROM originals WHERE ${isDev ? "TRUE" : "is_show = TRUE"} ORDER BY work_period DESC, created_at DESC`,
+  );
+  return res.rows.map((row) => ({
+    id: row.id,
+    postId: row.post_id,
+    title: row.title,
+    titleEng: row.title_eng,
+    tapeImage: row.tape_image,
+    workPeriod: row.work_period,
+    category: row.category,
+    isShow: row.is_show,
+    createdAt: row.created_at,
+  }));
+}
+
 export async function getParticipantsData(): Promise<ParticipantData[]> {
   const res = await client.query(
     `SELECT * FROM participants ORDER BY "created_at" ASC`,
