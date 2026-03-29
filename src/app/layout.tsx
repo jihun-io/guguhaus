@@ -13,6 +13,13 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.URL || "http://localhost:3000"),
   title: "99haus",
   description: "이야기가 시작되는 곳.",
+  icons: {
+    icon: [
+      { url: "/images/favicon.png", type: "image/png" },
+    ],
+    shortcut: "/images/favicon.png",
+    apple: "/images/favicon.png",
+  },
 };
 
 export default function RootLayout({
