@@ -32,7 +32,7 @@ export default async function OriginalsDetailPage({
         </div>
         <hr className="border border-hr my-8" />
         <div
-          className="text-foreground prose max-w-full prose-li:prose-p:my-0 prose-h4:text-2xl prose-p:whitespace-pre-wrap"
+          className="text-foreground prose max-w-full prose-li:prose-p:my-0 prose-h4:text-2xl prose-p:whitespace-pre-wrap prose-li:marker:text-black"
           dangerouslySetInnerHTML={{ __html: data.htmlContent }}
         ></div>
       </article>
