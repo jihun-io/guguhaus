@@ -58,7 +58,7 @@ export default function WorksClient({
       </div>
       {hasMore && (
         <button
-          onClick={() => setVisibleCount((prev) => prev + 2)}
+          onClick={() => setVisibleCount((prev) => prev + 4)}
           className="text-center py-2 px-4 mt-8 border border-black hover:bg-black hover:text-white transition-colors"
         >
           더 보기
