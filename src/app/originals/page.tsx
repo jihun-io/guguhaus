@@ -1,3 +1,4 @@
+import Link from "next/link";
 import VHS from "@/components/originals/VHS";
 import { getOriginalsData } from "@/utils/getData";
 
@@ -18,14 +19,14 @@ export default async function OriginalsPage() {
 
       <div className="flex flex-col gap-8">
         {originalsData.map((item) => (
-          <div key={item.id}>
+          <Link key={item.id} href={`/originals/${item.postId}`}>
             <VHS
               title={item.title}
               subtitle={item.titleEng}
               period={item.workPeriod ?? ""}
               vhsImage={item.tapeImage ?? ""}
             />
-          </div>
+          </Link>
         ))}
       </div>
     </section>

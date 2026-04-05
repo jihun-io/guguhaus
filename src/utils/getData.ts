@@ -238,6 +238,10 @@ export interface OriginalsData {
   createdAt: string;
 }
 
+export interface OriginalsDetailData extends OriginalsData {
+  htmlContent: string;
+}
+
 export async function getOriginalsData(): Promise<OriginalsData[]> {
   const res = await client.query(
     `SELECT * FROM originals WHERE ${isDev ? "TRUE" : "is_show = TRUE"} ORDER BY work_period DESC, created_at DESC`,
@@ -253,6 +257,31 @@ export async function getOriginalsData(): Promise<OriginalsData[]> {
     isShow: row.is_show,
     createdAt: row.created_at,
   }));
+}
+
+export async function getOriginalsDetail(
+  postId: string,
+): Promise<OriginalsDetailData | null> {
+  const res = await client.query(
+    `SELECT * FROM originals WHERE post_id = $1 AND ${isDev ? "TRUE" : "is_show = TRUE"} LIMIT 1`,
+    [postId],
+  );
+  const row = res.rows[0];
+  if (!row) {
+    return null;
+  }
+  return {
+    id: row.id,
+    postId: row.post_id,
+    title: row.title,
+    titleEng: row.title_eng,
+    tapeImage: row.tape_image,
+    workPeriod: row.work_period,
+    category: row.category,
+    isShow: row.is_show,
+    createdAt: row.created_at,
+    htmlContent: row.html_content,
+  };
 }
 
 export async function getParticipantsData(): Promise<ParticipantData[]> {
