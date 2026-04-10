@@ -25,7 +25,7 @@ function WorksCard({
   date,
 }: Readonly<WorksData>) {
   return (
-    <Link href={`/history/${postId}`} className="ml-auto mr-auto w-full">
+    <Link href={`/works/${postId}`} className="ml-auto mr-auto w-full">
       <img
         src={thumbnail}
         alt={imgAlt}

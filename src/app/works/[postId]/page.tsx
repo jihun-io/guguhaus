@@ -17,7 +17,7 @@ export default async function HistoryPage({
 
   return (
     <section>
-      <h2 className="uppercase font-bold text-4xl">History</h2>
+      <h2 className="uppercase font-bold text-4xl">Works</h2>
       <article className="max-w-3xl mx-auto my-8">
         <div className="flex flex-col justify-center gap-2 mb-8">
           <img src={data.thumbnail} alt={data.imgAlt} className="w-4/6" />
