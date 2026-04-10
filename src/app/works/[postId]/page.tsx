@@ -1,7 +1,25 @@
+import type { Metadata } from "next";
 import { getHistoryDetail } from "@/utils/getData";
 import NotFound from "@/app/not-found";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ postId: string }>;
+}): Promise<Metadata> {
+  const { postId } = await params;
+  const data = await getHistoryDetail(postId);
+  if (!data) return {};
+  return {
+    title: data.title,
+    openGraph: {
+      title: `${data.title} | 99haus`,
+      images: [data.thumbnail],
+    },
+  };
+}
 
 export default async function HistoryPage({
   params,

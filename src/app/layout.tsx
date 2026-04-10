@@ -11,7 +11,10 @@ import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.URL || "http://localhost:3000"),
-  title: "99haus",
+  title: {
+    default: "99haus",
+    template: "%s | 99haus",
+  },
   description: "이야기가 시작되는 곳.",
   icons: {
     icon: [
@@ -19,6 +22,11 @@ export const metadata: Metadata = {
     ],
     shortcut: "/images/favicon.png",
     apple: "/images/favicon.png",
+  },
+  openGraph: {
+    siteName: "99haus",
+    description: "이야기가 시작되는 곳.",
+    images: ["/images/og-image.png"],
   },
 };
 
