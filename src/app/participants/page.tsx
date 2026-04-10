@@ -1,4 +1,7 @@
+import type { Metadata } from "next";
 import { getParticipantsData } from "@/utils/getData";
+
+export const metadata: Metadata = { title: "Participants" };
 
 export const dynamic = "force-dynamic";
 

@@ -1,6 +1,9 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import VHS from "@/components/originals/VHS";
 import { getOriginalsData } from "@/utils/getData";
+
+export const metadata: Metadata = { title: "Ori9inals" };
 
 export const dynamic = "force-dynamic";
 

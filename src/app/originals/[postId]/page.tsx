@@ -1,7 +1,27 @@
+import type { Metadata } from "next";
 import { getOriginalsDetail } from "@/utils/getData";
 import NotFound from "@/app/not-found";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ postId: string }>;
+}): Promise<Metadata> {
+  const { postId } = await params;
+  const data = await getOriginalsDetail(postId);
+  if (!data) return {};
+  return {
+    title: data.title,
+    ...(data.tapeImage && {
+      openGraph: {
+        title: `${data.title} | 99haus`,
+        images: [data.tapeImage],
+      },
+    }),
+  };
+}
 
 export default async function OriginalsDetailPage({
   params,
