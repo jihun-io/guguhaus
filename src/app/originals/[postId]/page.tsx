@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import { getOriginalsDetail } from "@/utils/getData";
 import NotFound from "@/app/not-found";
+import PasswordGate from "./PasswordGate";
+import { isUnlockTokenValid, unlockCookieName } from "./gate";
 
 export const dynamic = "force-dynamic";
 
@@ -35,6 +38,12 @@ export default async function OriginalsDetailPage({
     return <NotFound />;
   }
 
+  const cookieStore = await cookies();
+  const cookieValue = cookieStore.get(unlockCookieName(postId))?.value;
+  const isLocked =
+    !!data.password &&
+    !(cookieValue && isUnlockTokenValid(postId, data.password, cookieValue));
+
   return (
     <section>
       <h2 className="uppercase font-bold text-4xl">Originals</h2>
@@ -51,10 +60,14 @@ export default async function OriginalsDetailPage({
           </p>
         </div>
         <hr className="border-t border-hr my-8" />
-        <div
-          className="text-foreground prose max-w-full prose-li:prose-p:my-0 prose-h4:text-2xl prose-p:whitespace-pre-wrap prose-li:marker:text-black"
-          dangerouslySetInnerHTML={{ __html: data.htmlContent }}
-        ></div>
+        {isLocked ? (
+          <PasswordGate postId={postId} />
+        ) : (
+          <div
+            className="text-foreground prose max-w-full prose-li:prose-p:my-0 prose-h4:text-2xl prose-p:whitespace-pre-wrap prose-li:marker:text-black"
+            dangerouslySetInnerHTML={{ __html: data.htmlContent }}
+          ></div>
+        )}
       </article>
     </section>
   );

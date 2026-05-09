@@ -240,6 +240,7 @@ export interface OriginalsData {
 
 export interface OriginalsDetailData extends OriginalsData {
   htmlContent: string;
+  password: string | null;
 }
 
 export async function getOriginalsData(): Promise<OriginalsData[]> {
@@ -281,6 +282,7 @@ export async function getOriginalsDetail(
     isShow: row.is_show,
     createdAt: row.created_at,
     htmlContent: row.html_content,
+    password: row.password ?? null,
   };
 }
 
