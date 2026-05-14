@@ -17,6 +17,15 @@ const nextConfig: NextConfig = {
     });
     return config;
   },
+  async redirects() {
+    return [
+      {
+        source: "/history/:slug*",
+        destination: "/works/:slug*",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
